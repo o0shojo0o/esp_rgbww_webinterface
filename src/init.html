@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-hide, .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
+    .spinner {
+        margin: 100px auto 0;
+        width: 70px;
+        text-align: center;
+    }
+
+    .spinner > div {
+        width: 18px;
+        height: 18px;
+        background-color: rgb(124,77,255);
+
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+    .animate-hide {
+        transition: all linear 0.5s;
+        opacity: 1;
+
+
+    }
+
+    .animate-hide.ng-hide {
+        line-height: 0;
+        opacity: 0;
+
+    }
+
+    @-webkit-keyframes sk-bouncedelay {
+        0%, 80%, 100% { -webkit-transform: scale(0) }
+        40% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes sk-bouncedelay {
+        0%, 80%, 100% {
+            -webkit-transform: scale(0);
+            transform: scale(0);
+        } 40% {
+              -webkit-transform: scale(1.0);
+              transform: scale(1.0);
+          }
+    }
+
+    </style>
+    <link href="app.min.css" rel="stylesheet" />
+    <title>RGBWW Controller</title>
+</head>
+
+
+<body ng-app="rgbwwApp"  ng-style="{'background-color' : '#e1e1e1'}" layout="row" class="ng-cloak" ng-controller="initCtrl" >
+
+<div layout="column" flex>
+    <md-toolbar layout="row" layout-align="Center center" style="min-height:54px!important; max-height:54px!important;">
+       <span class="md-title">RGBWW Controller</span>
+    </md-toolbar>
+
+    <div class="container" layout="row" flex >
+
+        <md-content flex id="content" style="background-color: #e1e1e1;" >
+                <div  layout="column" layout-align="center" >
+                    <div layout="row" layout-align="center center">
+                        <md-card flex="50">
+                            <md-card-header>
+                                <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                            <svg-icon name="wifi"></svg-icon>
+                                        </md-icon> Connection</span>
+                                </md-card-header-text>
+                            </md-card-header>
+                            <md-divider></md-divider>
+                            <md-card-content>
+                                <div layout="row" layout-align="end center">
+                                    <div style="margin-top:10px;">
+                                        <md-button class="md-icon-button" ng-click="refreshnetwork(true)" aria-label="Refresh" ng-hide="netloading">
+                                            <md-icon ><svg-icon name="refresh"></svg-icon></md-icon>
+
+                                        </md-button>
+
+                                    </div>
+                                    <md-progress-circular ng-hide="!netloading" md-mode="indeterminate"></md-progress-circular>
+                                    <md-input-container class="cardselect cardinput">
+
+                                        <md-select ng-disabled="netloading || wifidata.scan != false" ng-model="wnetwork" id="wifiselect" >
+                                            <label show-xs>Available Wifi</label>
+                                            <md-option ng-value="wifi" ng-repeat="wifi in wifidata.available" value="{{wifi.title}}">
+                                                <div layout="row" layout-align="start center">
+                                                    <wifi-icon signal="{{wifi.signal}}" secured="{{wifi.encryption}}"></wifi-icon>
+                                                    <span style="padding-left: 10px;">{{wifi.title}}</span>
+                                                </div>
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+
+
+                                </div>
+                                <div layout="row" layout-align="start center" ng-hide="wnetwork.encryption == 'OPEN' ">
+                                    <div flex class="inputlabel" >
+                                        <span ng-disabled="wnetwork.encryption == 'OPEN' || netloading" >Password</span>
+                                    </div>
+                                    <md-input-container class="cardinput">
+                                        <input type="text" ng-disabled="wnetwork.encryption == 'OPEN' || netloading" ng-model="wifi.password" aria-label="Wifi Password">
+
+                                    </md-input-container>
+
+                                </div>
+
+                                <div layout="row"  layout-align="center center">
+                                    <div flex>
+
+                                        <span>Manual IP Configuration</span>
+
+                                    </div>
+                                    <md-input-container class="cardinput">
+
+                                        <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.network.connection.dhcp"></md-switch>
+
+                                    </md-input-container>
+
+                                </div>
+                                <div ng-show="rgbww.network.connection.dhcp == false" class="ng-hide animate-hide">
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">IP Address</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.ip" aria-label="Controller IP">
+
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel" >
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">Gateway</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.gateway" aria-label="Gateway">
+
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">Netmask</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.netmask" aria-label="Netmask">
+
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </md-card-content>
+
+                            <md-card-header style="margin-top:10px;">
+                                <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                            <svg-icon name="developer_board"></svg-icon>
+                                        </md-icon> Server Settings</span>
+                                </md-card-header-text>
+                            </md-card-header>
+                            <md-divider></md-divider>
+
+                            <md-card-content>
+                                <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                    <div>
+                                        <span class="card-subtitle" >Tcp Server</span>
+                                    </div>
+                                    <div flex></div>
+                                    <md-switch class="md-primary" md-no-ink aria-label="Tcp Server" ng-model="rgbww.network.tcpserver.enabled"></md-switch>
+                                </div>
+                                <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                    <div>
+                                        <span class="card-subtitle" >Udp Server</span>
+                                    </div>
+                                    <div flex></div>
+                                    <md-switch class="md-primary" md-no-ink aria-label="Udp Server" ng-model="rgbww.network.udpserver.enabled"></md-switch>
+                                </div>
+                                <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                    <div>
+                                        <span class="card-subtitle" >MQTT</span>
+                                    </div>
+                                    <div flex></div>
+                                    <md-switch class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                </div>
+                                <div ng-hide="!rgbww.network.mqtt.enabled" class="ng-hide animate-hide">
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Server</span>
+
+                                        </div>
+
+                                        <md-input-container class="cardinput">
+
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.server" aria-label="MQTT Server">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Port</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row" layout-align="center center">
+                                        <div flex class="inputlabel" >
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Username</span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.username" aria-label="MQTT Username">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row" layout-align="center center">
+                                        <div flex class="inputlabel" >
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Password</span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.password" aria-label="MQTT Username">
+
+                                        </md-input-container>
+
+                                    </div>
+                                </div>
+                            </md-card-content>
+                            <md-divider></md-divider>
+                            <md-card-actions layout="column" layout-align="start">
+                                <md-button ng-click="connect($event)" ng-disabled1="canconnect()">Connect</md-button>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                </div>
+
+        </md-content>
+
+    </div>
+</div>
+</div>
+
+</body>
+<script type="text/ng-template" id="connectiondialog.html">
+ <md-dialog aria-label="Connection Dialog" style="min-width:300px">
+        <md-dialog-content >
+        <div class="md-dialog-content" >
+            <div layout="row" layout-align="center center" style="min-height:200px;" ng-hide="!processing">
+                <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
+            </div>
+            <div ng-hide="processing" layout="row" layout-align="start center">
+                <div ng-show="connection.connected == true">
+                    <span class="card-subtitle" >Connection successful</span>
+                    <p>
+                        SSID : {{ condata.ssid }}<br>
+                        IP   : {{ connection.ip }}
+                    </p>
+                    <span ng-show="connection.restart"  class="ng-hide">Controller will restart now for IP settings to take effect</span>
+                </div>
+                <div ng-show="connection.connected == false">
+                    <span class="card-subtitle" >Connection failed</span>
+                    <p>
+                        Could not connect to "{{ condata.ssid }}"<br>
+                        Error: {{ connection.error }}
+                    </p>
+                </div>
+                <div ng-show="networkerror == true" class="ng-hide">
+                    <span class="card-subtitle" >Connection failed</span>
+                    <p>
+                        There was an error with the network connection.
+                        Please try again
+                    </p>
+                </div>
+            </div>
+        </div>
+        </md-dialog-content>
+        <md-dialog-actions ng-show="connection.connected == false || networkerror == true" class="ng-hide">
+            <md-button ng-click="cancel()" class="md-primary" >OK</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+</script>
+<script src="app.min.js" type="text/javascript" ></script>
+
+</html>

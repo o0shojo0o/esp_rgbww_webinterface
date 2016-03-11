@@ -1,0 +1,9 @@
+# Webstorm projects files
+.idea/
+
+# tmp folders
+build/
+node_modules/
+bower_components/
+
+

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
+    .spinner {
+        margin: 100px auto 0;
+        width: 70px;
+        text-align: center;
+    }
+
+    .spinner > div {
+        width: 18px;
+        height: 18px;
+        background-color: rgb(124,77,255);
+
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    }
+
+    .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+    @-webkit-keyframes sk-bouncedelay {
+        0%, 80%, 100% { -webkit-transform: scale(0) }
+        40% { -webkit-transform: scale(1.0) }
+    }
+
+    @keyframes sk-bouncedelay {
+        0%, 80%, 100% {
+            -webkit-transform: scale(0);
+            transform: scale(0);
+        } 40% {
+              -webkit-transform: scale(1.0);
+              transform: scale(1.0);
+          }
+    }
+
+    </style>
+    <link href="app.min.css" rel="stylesheet" />
+    <title>RGBWW Controller</title>
+</head>
+
+
+<body ng-app="rgbwwApp"  ng-style="{'background-color' : '#e1e1e1'}" layout="row" class="ng-cloak" ng-controller="mainCtrl" >
+<md-sidenav md-component-id="menu" class="md-sidenav-left md-s">
+    <md-toolbar>
+        <div class="md-toolbar-tools" flex>
+            <span class="md-title">Settings</span>
+        </div>
+    </md-toolbar>
+    <md-list>
+        <md-list-item ng-click="navigateTo(0, $event)" md-no-ink>
+            <md-icon aria-label="Start"><svg-Icon name="home"></svg-Icon></md-icon>
+            <p>Start</p>
+        </md-list-item>
+        <md-list-item ng-click="navigateTo(1, $event)" md-no-ink>
+                <md-icon><svg-Icon name="palette"></svg-Icon>                    </md-icon>
+                <p>Color Settings</p>
+        </md-list-item>
+
+        <md-list-item ng-click="navigateTo(2, $event)" md-no-ink>
+                <md-icon md-font-set="material-icons"><svg-Icon name="wifi"></svg-Icon>
+                    </md-icon>
+                <p>Network Settings</p>
+        </md-list-item>
+        <md-list-item ng-click="navigateTo(3, $event)" md-no-ink>
+                <md-icon><svg-Icon name="memory"></svg-Icon></md-icon>
+                <p>System Settings</p>
+        </md-list-item>
+    </md-list>
+</md-sidenav>
+
+<div layout="column" flex>
+    <md-toolbar layout="row" style="min-height:54px!important; max-height:54px!important;">
+        <div class="md-toolbar-tools" flex hide-gt-xs >
+            <md-button class="md-icon-button" ng-click="openMenu()" hide-gt-xs aria-label="Toggle Menu">
+                <md-icon><svg-icon name="menu"></svg-icon>
+                    </md-icon>
+            </md-button>
+            <div class="md-toolbar-tools" flex>
+                <span class="md-title">RGBWW Controller</span>
+
+            </div>
+        </div>
+        <div flex hide-xs> </div>
+        <md-tabs md-no-ink md-center-tabs md-selected="tabs.selectedIndex" hide-xs>
+            <md-tab id="tab1"  aria-controls="tab1-content">Start</md-tab>
+            <md-tab id="tab2" aria-controls="tab3-content">Color Settings</md-tab>
+            <md-tab id="tab3" aria-controls="tab2-content">Network Settings</md-tab>
+
+            <md-tab id="tab4" aria-controls="tab4-content">System Settings</md-tab>
+
+        </md-tabs >
+        <div flex hide-xs> </div>
+
+
+    </md-toolbar>
+
+    <div class="container" layout="row" flex >
+
+        <md-content flex id="content" style="background-color: #e1e1e1;" >
+
+            <ng-switch on="tabs.selectedIndex" class="tabpanel-container">
+                <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="0" ng-cloak>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center"  >
+                            <md-card flex="50" >
+                                <md-card-header >
+                                    <md-card-header-text >
+
+                                        <span class="md-title">
+                                        <md-icon class="md-card-icon">
+                                        <svg-icon name="palette"></svg-icon>
+                                        </md-icon>Color</span>
+
+                                    </md-card-header-text>
+
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content style="padding-top:0px;">
+                                    <div class="md-color-picker-container in" layout="column" style="height:auto!important; width:auto!important;">
+                                        <div class="md-color-picker-tabs md-color-picker-colors">
+                                            <div layout="row" layout-align="space-around center" style="height: 270px">
+                                                <div md-color-picker-spectrum></div>
+                                                <div md-color-picker-hue></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div layout="row" layout-align="center center" style="padding-top: 15px;">
+                                        <div flex="10">
+                                            <span>WW</span>
+                                        </div>
+                                        <md-slider ng-mouseup="setColor()" ng-model="hsvcolor.whitebalance" min="{{ rgbww.color.colortemp.ww }}" max="{{ rgbww.color.colortemp.cw }}" class="centerslider" aria-label="White Color Temperature">
+                                        </md-slider>
+                                        <div flex="10">
+                                            <span>CW</span>
+                                        </div>
+                                    </div>
+                                </md-card-content>
+                                <md-divider></md-divider>
+                                <md-card-content style="padding-top:0px;">
+                                    Input Fields
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="1" ng-cloak>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center"  >
+                            <md-card flex="50" >
+                                <md-card-header >
+                                    <md-card-header-text >
+
+                                        <span class="md-title"> <md-icon class="md-card-icon">
+                                        <svg-icon name="tune"></svg-icon>
+                                        </md-icon> HSV</span>
+
+                                    </md-card-header-text>
+
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+
+                                    <div layout="row" layout-align="center center" layout-align-xs="start end">
+                                        <div flex hide-xs class="sliderlabel" >
+
+                                            <span >Calculation Model</span>
+
+                                        </div>
+                                        <md-input-container class="cardselect">
+
+                                            <md-select ng-model="rgbww.color.hsv.model">
+                                                <label show-xs>Calculation Model</label>
+                                                <md-option ng-value="model.id" ng-repeat="model in hsvmodes" value="{{model.id}}">
+                                                    {{model.title}}
+                                                </md-option>
+                                            </md-select>
+
+                                        </md-input-container>
+                                        <div hide-gt-xs style="width:30px"></div>
+                                    </div>
+
+                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start" style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel" >
+                                            <span>Red</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.hsv.red" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Red">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Yellow</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.hsv.yellow" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Yellow">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span >Green</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.hsv.green" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Green">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Cyan</span>
+                                        </div>
+                                        <md-slider  ng-model="rgbww.color.hsv.cyan" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Cyan">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Blue</span>
+                                        </div>
+                                        <md-slider  ng-model="rgbww.color.hsv.blue" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Blue">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Magenta</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
+                                        </md-slider>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center"  >
+                            <md-card flex="50" >
+                                <md-card-header >
+                                    <md-card-header-text >
+
+                                        <span class="md-title"> <md-icon md-font-set="material-icons" class="md-card-icon">
+                                            <svg-icon name="palette"></svg-icon>
+                                        </md-icon> Color</span>
+
+                                    </md-card-header-text>
+
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+                                    <div layout="row"  layout-align="center center"  layout-align-xs="start end">
+                                        <div flex hide-xs class="sliderlabel" >
+
+                                            <span >Output Model</span>
+                                        </div>
+                                        <md-input-container class="cardselect">
+
+                                            <md-select ng-model="rgbww.color.outputmode">
+                                                <label show-xs>Output Model</label>
+                                                <md-option ng-value="model.id" ng-repeat="model in colormodes" value="{{model.id}}">
+                                                    {{model.title}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                        <div hide-gt-xs style="width:30px"></div>
+                                    </div>
+                                    <div style="margin-top:15px;">
+                                        <span class="card-subtitle" >Led Brightness </span>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 10px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel" >
+                                            <span>Red</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.brightness.red" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Red">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Green</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.brightness.green" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Green">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Blue</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.brightness.blue" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Blue">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Warm White</span>
+                                        </div>
+                                        <md-slider  ng-model="rgbww.color.brightness.ww" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Warm White">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Cold White</span>
+                                        </div>
+                                        <md-slider ng-model="rgbww.color.brightness.cw" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Cold White">
+                                        </md-slider>
+                                    </div>
+
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50"  class="bottomcard">
+                                <md-card-header >
+                                    <md-card-header-text >
+
+                                        <span class="md-title"> <md-icon class="md-card-icon">
+                                        <svg-icon name="exposure"></svg-icon>
+                                        </md-icon> White Temperatur (Kelvin)</span>
+
+                                    </md-card-header-text>
+
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Warm White</span>
+                                        </div>
+                                        <md-slider disabled ng-model="rgbww.color.colortemp.ww" min="2000" max="5000" md-discrete class="centerslider" aria-label="WarmWhite colortemp">
+                                        </md-slider>
+                                    </div>
+                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"   style="padding-top: 15px;">
+                                        <div flex="30" flex-xs="100" class="sliderlabel">
+                                            <span>Cold White</span>
+                                        </div>
+                                        <md-slider disabled ng-model="rgbww.color.colortemp.cw" min="4000" max="8000" md-discrete class="centerslider" aria-label="ColdWhite colortemp">
+                                        </md-slider>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" id="tab3-content" aria-labelledby="tab3" ng-switch-when="2" ng-cloak>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50">
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                           <svg-icon name="wifi"></svg-icon>
+                                        </md-icon> Connection</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+                                    <div layout="row" layout-align="start center" >
+                                        <span flex="40" layout-padding >Connected to</span>
+                                        <span >{{ rgbww.network.connection.ssid }}</span>
+                                    </div>
+                                    <div layout="row" layout-align="start center" >
+                                        <span  flex="40" layout-padding >MAC</span>
+                                        <span >{{ rgbww.network.connection.mac }}</span>
+                                    </div>
+                                    <div layout="row" layout-align="end center">
+                                        <md-button ng-click="showConfirm($event, 'forget_wifi', 'Wifi Inforation (SSID, Password) will be deleted and Controller will restart in AccessPoint mode')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
+                                    </div>
+                                    <div style="margin-top:15px;" layout="row"  layout-align="center center">
+                                        <div>
+                                            <span class="card-subtitle" >IP Setting</span>
+                                        </div>
+                                        <div flex></div>
+
+                                    </div>
+
+                                    <span class="md-caption">IP settings require a restart to take effect. If changed controller will restart automatically</span>
+                                    <div layout="row"  layout-align="center center">
+                                        <div flex>
+
+                                            <span>Manual Configuration</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+
+                                            <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.network.connection.dhcp"></md-switch>
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">IP Address</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.ip" aria-label="Controller IP">
+
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel" >
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">Gateway</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.gateway" aria-label="Gateway">
+
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="rgbww.network.connection.dhcp">Netmask</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.netmask" aria-label="Netmask">
+
+                                        </md-input-container>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50">
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                        <svg-icon name="developer_board"></svg-icon>
+                                        </md-icon> Server Settings</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+
+                                <md-card-content>
+                                    <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                        <div>
+                                            <span class="card-subtitle" >Tcp Server</span>
+                                        </div>
+                                        <div flex></div>
+                                        <md-switch class="md-primary" md-no-ink aria-label="Tcp Server" ng-model="rgbww.network.tcpserver.enabled"></md-switch>
+                                    </div>
+                                    <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                        <div>
+                                            <span class="card-subtitle" >Udp Server</span>
+                                        </div>
+                                        <div flex></div>
+                                        <md-switch class="md-primary" md-no-ink aria-label="Udp Server" ng-model="rgbww.network.udpserver.enabled"></md-switch>
+                                    </div>
+                                    <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                        <div>
+                                            <span class="card-subtitle" >MQTT</span>
+                                        </div>
+                                        <div flex></div>
+                                        <md-switch class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Server</span>
+
+                                        </div>
+
+                                        <md-input-container class="cardinput">
+
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.server" aria-label="MQTT Server">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Port</span>
+
+                                        </div>
+                                        <md-input-container class="cardinput">
+
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row" layout-align="center center">
+                                        <div flex class="inputlabel" >
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Username</span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.username" aria-label="MQTT Username">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row" layout-align="center center">
+                                        <div flex class="inputlabel" >
+                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Password</span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.password" aria-label="MQTT Username">
+
+                                        </md-input-container>
+
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50"  class="bottomcard">
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                            <svg-icon name="router"></svg-icon>
+                                        </md-icon> Access Point Settings</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+
+                                <md-card-content>
+                                    <span class="md-caption">AccessPoint settings require a restart to take effect. If changed controller will restart automatically</span>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span>AP Name</span>
+
+                                        </div>
+
+                                        <md-input-container class="cardinput">
+
+                                            <input type="text" ng-model="rgbww.network.ap.ssid" aria-label="Accesspoint Name">
+
+                                        </md-input-container>
+
+                                    </div>
+                                    <div  layout="row"  layout-align="center center">
+                                        <div>
+                                            <span class="card-subtitle" >Secure AP</span>
+                                        </div>
+                                        <div flex></div>
+                                        <md-switch class="md-primary" md-no-ink aria-label="Secure Accesspoint" ng-model="rgbww.network.ap.secured"></md-switch>
+                                    </div>
+
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.network.ap.secured">Password</span>
+
+                                        </div>
+
+                                        <md-input-container class="cardinput">
+
+                                            <input minlength="8" maxlength="20" type="password" ng-disabled="!rgbww.network.ap.secured" ng-model="rgbww.network.ap.password" aria-label="Accesspoint Password">
+
+                                        </md-input-container>
+
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" id="tab4-content" aria-labelledby="tab4" ng-switch-when="3" ng-cloak>
+
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50" >
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                        <svg-icon name="info"></svg-icon>
+                                        </md-icon> Information</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+
+
+                                    <div style="margin-top:20px; margin-bottom:5px;">
+                                        <span class="card-subtitle" >Settings </span>
+                                    </div>
+                                    <div layout="row"   layout-align="end center" layout-padding>
+                                        <md-button  class="md-raised" ng-click="exportSettings()" aria-label="Export Settings" md-no-ink> Export Settings </md-button>
+
+                                        <md-button   class="md-raised" ng-disabled="true" aria-label="Import Settings" md-no-ink> Import Settings </md-button>
+                                    </div>
+                                    <div style="margin-top:20px; margin-bottom:5px;">
+                                        <span class="card-subtitle" >System </span>
+                                    </div>
+                                    <div layout="row"   layout-align="end center" layout-padding>
+                                        <md-button ng-click="showConfirm($event, 'restart', 'This will restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
+
+                                        <md-button ng-click="showConfirm($event, 'reset', 'This will reset all Settings and restart the Controller in AccessPoint Mode')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50" >
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                        <svg-icon name="security"></svg-icon>
+                                        </md-icon> Security</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+                                    <div layout="row"  layout-align="center center">
+                                        <div flex>
+                                            <span>Secure Settings Access </span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <md-switch class="md-primary" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.security.settings_secured"></md-switch>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"  layout-align="center center">
+
+                                        <div flex class="inputlabel">
+
+                                            <span ng-disabled="!rgbww.security.settings_secured">Password</span>
+                                        </div>
+                                        <md-input-container class="cardinput">
+                                            <input type="password" ng-disabled="!rgbww.security.settings_secured" ng-model="rgbww.security.settings_password" aria-label="Password">
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row"   layout-align="start center">
+                                        <md-button ng-disabled="!rgbww.security.settings_secured" class="md-raised" aria-label="Save Password" ng-click="saveSettings()" md-no-ink> Update </md-button>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center">
+                            <md-card flex="50" class="bottomcard">
+                                <md-card-header>
+                                    <md-card-header-text>
+                                        <span class="md-title"><md-icon class="md-card-icon">
+                                            <svg-Icon name="system_update"></svg-Icon>
+                                        </md-icon> Firmware</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+                                <md-card-content>
+                                    <div layout="row" layout-align="start center" >
+                                        <span flex="40" layout-padding class="md-caption">Firmware </span>
+                                        <span class="md-caption">{{ rgbww.info.version }}</span>
+                                    </div>
+
+                                    <div layout="row" layout-align="start center" >
+                                        <span  flex="40" layout-padding class="md-caption">Config Version </span>
+                                        <span  class="md-caption">{{ rgbww.info.config_version }}</span>
+                                    </div>
+
+                                    <div layout="row" layout-align="start center" >
+                                        <span  flex="40" layout-padding class="md-caption">RGBWW Version </span>
+                                        <span  class="md-caption">{{ rgbww.info.rgbww }}</span>
+                                    </div>
+
+                                    <div layout="row" layout-align="start center" >
+                                        <span flex="40" layout-padding class="md-caption">SMING Version </span>
+                                        <span  class="md-caption">{{ rgbww.info.sming }}</span>
+                                    </div>
+                                    <div style="margin-top:20px; margin-bottom:5px;">
+                                        <span class="card-subtitle" >Update Firmware </span>
+                                    </div>
+                                    <span class="md-caption">Be sure to only apply updates from trusted sources.</span>
+                                    <span class="md-caption">Official Firmware updates are available via Github</span>
+                                    <div layout="column" layout-align="center start" >
+
+                                        <md-input-container style="width:100%; margin-bottom: 0px!important;">
+                                            <label>Update Url</label>
+                                            <input type="text"  ng-model="updateurl" aria-label="Update URL" >
+
+                                        </md-input-container>
+                                        <md-button  class="md-raised" aria-label="Update" md-no-ink>Update</md-button>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-switch>
+
+        </md-content>
+
+    </div>
+    <div >
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-gt-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveSettings()" style="bottom: 8px; right:8px;"  aria-label="Save Settings">
+            <md-icon><svg-icon name="done"></svg-icon></md-icon>
+        </md-button>
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveSettings()"  aria-label="Save Settings">
+            <md-icon><svg-icon name="done"></svg-icon></md-icon>
+        </md-button>
+
+    </div>
+</div>
+</div>
+
+</body>
+<script src="app.min.js" type="text/javascript" ></script>
+
+
+</html>

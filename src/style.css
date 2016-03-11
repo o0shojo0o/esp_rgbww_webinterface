@@ -1,0 +1,137 @@
+.cardselect {
+    min-width:220px;
+    margin:10px 0;
+}
+.cardinput {
+    margin:0px 15px;
+}
+
+.inputlabel {
+    margin-bottom:18px;
+}
+.sliderlabel {
+    width:80%;
+}
+
+.colorslider {
+    width:80%;
+}
+
+.centerslider {
+
+    width:80%;
+}
+.md-slider {
+    transition: none;
+}
+.centerslider > div > div.md-track-container > div.md-track.md-track-fill {
+    background-color:transparent!important;
+
+}
+.container  md-card {
+    max-width: 400px!important;
+}
+md-tabs.noTabPanel md-tabs-wrapper {
+    display: none !important;
+}
+.card-subtitle {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+}
+md-list-item > button {
+    width:100%;
+    text-align:left !important;
+}
+.md-s {
+    max-width:240px!important;
+    min-width:auto!important;
+}
+.md-card-icon {
+    padding-bottom: 4px;
+}
+.md-track-ticks canvas { display: none; }
+span[disabled] {
+    color:rgba(0,0,0, 0.3);
+}
+md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
+    background-color: rgb(255,255,255);
+}
+input {
+    text-align:right;
+}
+.bottomcard {
+    margin-bottom:60px;
+}
+#wifiselect > md-select-value > span > div > div > wifi-icon {
+    visibility:  hidden;
+}
+
+.md-color-picker-container {
+    padding: 8px;
+    background: #fff;
+    outline: none;
+    height: 397px;
+    width: 347px;
+    opacity: 1;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.md-color-picker-container .md-color-picker-tabs {
+    margin: 0px -8px 0;
+}
+
+
+.md-color-picker-container .md-color-picker-tabs.md-color-picker-colors {
+    margin: 8px -8px -8px;
+}
+.md-color-picker-container .md-color-picker-tabs.md-color-picker-colors md-ink-bar {
+    top: auto;
+}
+.md-color-picker-container .md-color-picker-tabs.md-color-picker-colors .md-tab {
+    background: rgba(0, 0, 0, 0.075);
+}
+.md-color-picker-container .md-color-picker-tabs.md-color-picker-colors .md-tab.md-active {
+    background: #fff;
+}
+.md-color-picker-container .md-color-picker-colors {
+    overflow: hidden;
+    margin-top: 8px;
+}
+.md-color-picker-container .md-color-picker-colors .md-color-picker-marker {
+    position: absolute;
+    border: 2px solid #fff;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+.md-color-picker-container .md-color-picker-colors [md-color-picker-spectrum] {
+    position: relative;
+    cursor: crosshair;
+    overflow: hidden;
+    height: 255px;
+    width: 255px;
+}
+.md-color-picker-container .md-color-picker-colors [md-color-picker-spectrum] .md-color-picker-marker {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), inset 0 0 2px 0 rgba(0, 0, 0, 0.5);
+    top: -5px;
+    left: calc(100% - 5px);
+}
+.md-color-picker-container .md-color-picker-colors [md-color-picker-hue],
+.md-color-picker-container .md-color-picker-colors [md-color-picker-alpha] {
+    position: relative;
+    cursor: crosshair;
+    overflow: hidden;
+    width: 30px;
+}
+.md-color-picker-container .md-color-picker-colors [md-color-picker-hue] .md-color-picker-marker,
+.md-color-picker-container .md-color-picker-colors [md-color-picker-alpha] .md-color-picker-marker {
+    height: 5px;
+    width: 100%;
+    border-left: 0;
+    border-right: 0;
+    top: -2px;
+    left: 0;
+}
