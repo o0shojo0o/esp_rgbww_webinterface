@@ -1,6 +1,8 @@
 
 module.exports = function(grunt) {
+	
     grunt.initConfig({
+		pkg : grunt.file.readJSON('package.json'),
         ngAnnotate: {
             options: {
                 singleQuotes: true
@@ -44,6 +46,20 @@ module.exports = function(grunt) {
                 }
             }
         },
+		cachebreaker: {
+			dev: {
+				options: {
+					match: ['app.min.js', 'app.min.css'],
+					replacement: function (pkg){
+						
+						return pkg.version;
+					}
+				},
+				files: {
+					src: ['src/index.html', 'src/init.html' ]
+				}
+			}
+		},
         compress: {
             main: {
                 options: {
@@ -56,13 +72,21 @@ module.exports = function(grunt) {
                     {expand: true, cwd: 'build/', src: ['app.min.css'], dest:'dist', ext: '.min.css.gz'},
                 ]
             }
-        }
-
+        },
     });
     grunt.loadNpmTasks('grunt-contrib-concat'); // which NPM packages to load
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.registerTask('default', ['ngAnnotate', 'concat', 'uglify','cssmin', 'compress']);
+	grunt.loadNpmTasks('grunt-cache-breaker');
+	grunt.registerTask('version', 'output version', function() {
+		pkg = grunt.file.readJSON('package.json');
+		grunt.file.write('VERSION', pkg.version);
+	});
+	grunt.registerTask('cleanup', 'cleanup tmp files', function() {
+		grunt.file.delete('build', [{force:true}]);
+	});
+    grunt.registerTask('default', ['ngAnnotate', 'concat', 'uglify', 'cssmin', 'cachebreaker', 'compress', 'cleanup']);
+	grunt.registerTask('release', ['default', 'version']);
 };

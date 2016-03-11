@@ -1,31 +1,29 @@
 {
   "name": "rgbww-webapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web frontend for RGBWW Controller",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm install && npm install bower && bower install",
+    "release": "npm run start && grunt release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/patrickjahns/esp_rgbww_firmware.git"
+    "url": "git+https://github.com/patrickjahns/esp_rgbww_webinterface.git"
   },
   "author": "patrick jahns <github@patrickjahns.de>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/patrickjahns/esp_rgbww_firmware/issues"
+    "url": "https://github.com/patrickjahns/esp_rgbww_webinterface/issues"
   },
-  "homepage": "https://github.com/patrickjahns/esp_rgbww_firmware#readme",
+  "homepage": "https://github.com/patrickjahns/esp_rgbww_webinterface#readme",
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-cache-breaker": "^2.0.1",
     "grunt-contrib-compress": "^1.1.1",
     "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-ng-annotate": "^2.0.1"
-  },
-  "scripts": {
-    "start": "npm install && npm install bower && bower install",
-	"build": "npm run start && grunt"
   }
 }
