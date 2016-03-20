@@ -9,12 +9,12 @@ angular
             .accentPalette('deep-purple');})
     .factory('espcon', function($http, $timeout) {
         return {
-            getSettings: function() {
+            getConfig: function() {
                 return $http.get('/config').then(function(result) {
-                    return result.data.data;
+                    return result.data;
                 });
             },
-            saveSettings: function(settings, r) {
+            saveConfig: function(settings, r) {
                 var newsettings = JSON.parse(JSON.stringify(settings));
                 r = typeof r !== 'undefined' ? r : false;
                 if(newsettings.security.settings_password == "" || newsettings.security.settings_secured != 1) {
@@ -27,18 +27,28 @@ angular
                 }
                 newsettings.restart = r;
                 $http.post('/config', newsettings).then(function(result){
+                    //TODO: error handling
                     return true;
                 });
             },
-            getNetwork: function(scan) {
+            getInfo: function() {
+                return $http.get('/info').then(function(result){
+                    return result.data;
+                })
+            },
+            getNetworks: function(scan) {
                 scan = typeof scan !== 'undefined' ? scan : false;
                 if (scan == true) {
-                    return $http.get('/refreshnetworks').then(function(result) {
+                    return $http.post('/networks', {cmd:'refresh'}).then(function(result) {
+                        //TODO: better error handling
+                        if(result.data.success != true) {
+                            return {};
+                        }
                         var poll = function() {
                             return $timeout(function () {
-                                return $http.get('/get-networks').then(function (result) {
-                                    if (result.data.data.scan == false) {
-                                        return result.data.data;
+                                return $http.get('/networks').then(function (result) {
+                                    if (result.data.scanning == false) {
+                                        return result.data;
                                     } else {
                                         return poll();
                                     }
@@ -49,8 +59,8 @@ angular
                         return poll();
                     });
                 } else {
-                    return $http.get('/get-networks').then(function (result) {
-                        return result.data.data;
+                    return $http.get('/networks').then(function (result) {
+                        return result.data;
                     })
                 };
             },
@@ -64,7 +74,7 @@ angular
                         k: colortemp
                     },
                     cmd: {
-                        t: 500
+                        t: 700
                     }
                 };
                 return $http.post('/color', data).then(function (result) {
@@ -73,7 +83,7 @@ angular
             },
             getColor: function() {
                 return $http.get('/color').then(function(result) {
-                    return result.data.data;
+                    return result.data;
                 });
             },
             connectWifi: function(ssid, password) {
@@ -83,8 +93,8 @@ angular
                     var poll = function() {
                         return $timeout(function () {
                             return $http.get('/connect').then(function (result) {
-                                if (result.data.data.connecting == false) {
-                                    return result.data.data;
+                                if (result.data.status != 1) {
+                                    return result.data;
                                 } else {
                                     return poll();
                                 }
@@ -101,20 +111,33 @@ angular
                     return true;
                 });
 
+            },
+            intUpdate: function(update) {
+                return $http.post('/update', update).then(function(result) {
+                    return result.data;
+             })
+            },
+            getUpdatestatus: function() {
+                return $http.get('/update').then(function(result) {
+                    return result.data;
+                })
             }
-
-
         }
     })
     .controller('mainCtrl', function($scope, $mdSidenav, $timeout, $mdDialog, espcon) {
         var init = function () {
             $scope.saving = false;
+            $scope.webappversion = version;
             $scope.color = new tinycolor("rgb (0, 0, 0)");
             $scope.hsvcolor = { whitebalance: 0 };
             //TODO: make this dynamic and move the generation to firmware
             $scope.colormodes = [{title:"RGB", id:0}, {title:"RGBWW", id:1}, {title:"RGBCW", id:2}, {title:"RGBWWCW", id:3}];
             $scope.hsvmodes = [{title:"Normal", id:0},{title:"Spektrum", id:1},{title:"Rainbow", id:2}];
-            espcon.getSettings().then(function(data){
+            espcon.getInfo().then(function(data) {
+                //TODO error handling
+                $scope.ctrlinfo = data;
+            });
+            espcon.getConfig().then(function(data){
                 //TODO: check for error and how dialog
                 $scope.rgbww = data;
             }, function(data){
@@ -146,9 +169,9 @@ angular
         $scope.setColor = function() {
             espcon.setColor($scope.color, $scope.hsvcolor.whitebalance)
         };
-        $scope.saveSettings = function() {
+        $scope.saveConfig = function() {
             $scope.saving = true;
-            espcon.saveSettings($scope.rgbww, true).then(function(data){
+            espcon.saveConfig($scope.rgbww, true).then(function(data){
                 //Success
                 $scope.saving = false;
             }, function(data){
@@ -157,7 +180,8 @@ angular
             });
         };
         $scope.update = function(url) {
-            //TODO: fetch json from url, compaee version numbers and then only update
+            //TODO: fetch json from url, compare version numbers and then only update
+            //TODO: post json to controller, then fetch regularly the status and show to user
         };
 
 
@@ -210,7 +234,9 @@ angular
     })
     .controller('initCtrl', function($scope,$mdDialog, espcon) {
         var init = function () {
+            $scope.webappversion = version;
             $scope.netloading = true;
+
             $scope.wnetwork = {
                 title: "",
                 id: "",
@@ -219,10 +245,14 @@ angular
             $scope.wifi = {
                 password: ""
             };
-            espcon.getSettings().then(function(data){
+            espcon.getConfig().then(function(data){
                 $scope.rgbww = data;
             }, function(data){
                 $scope.rgbww = {};
+            });
+            espcon.getInfo().then(function(data) {
+                //TODO error handling
+                $scope.ctrlinfo = data;
             });
             $scope.refreshnetwork(false);
         };
@@ -230,7 +260,7 @@ angular
 
         $scope.refreshnetwork = function(rescan) {
             $scope.netloading = true;
-            espcon.getNetwork(rescan).then(function(data){
+            espcon.getNetworks(rescan).then(function(data){
                 $scope.wifidata = data;
                 $scope.netloading = false;
             }, function(data){
@@ -241,7 +271,7 @@ angular
 
 
         $scope.connect = function(ev) {
-            espcon.saveSettings($scope.rgbww, false);
+            espcon.saveConfig($scope.rgbww, false);
             var wifi = {
                 ssid: $scope.wnetwork.title,
                 password: $scope.wifi.password
@@ -268,13 +298,14 @@ angular
         };
 
         function ConnectionCtrl($scope, $mdDialog, espcon, wifi) {
-
+            $scope.count = 30;
             $scope.processing = true;
             $scope.condata = wifi;
             $scope.networkerror = false;
             espcon.connectWifi(wifi.ssid, wifi.password).then( function(data) {
                 $scope.connection = data;
                 $scope.processing = false;
+
             }, function(data) {
                 $scope.processing = false;
                 $scope.networkerror = true;
@@ -324,6 +355,8 @@ angular
             restrict: 'E'
         };
     });
+var version = "{{ VERSION }}";
+
 var icons = {
     developer_board:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg>',
     done:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>',

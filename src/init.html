@@ -62,7 +62,7 @@
     }
 
     </style>
-    <link href="app.min.css?rel=0.1.0" rel="stylesheet" />
+    <link href="app.min.css?rel={{ VERSION }}" rel="stylesheet" />
     <title>RGBWW Controller</title>
 </head>
 
@@ -100,7 +100,7 @@
                                     <md-progress-circular ng-hide="!netloading" md-mode="indeterminate"></md-progress-circular>
                                     <md-input-container class="cardselect cardinput">
 
-                                        <md-select ng-disabled="netloading || wifidata.scan != false" ng-model="wnetwork" id="wifiselect" >
+                                        <md-select ng-disabled="netloading || wifidata.scanning != false" ng-model="wnetwork" id="wifiselect" >
                                             <label show-xs>Available Wifi</label>
                                             <md-option ng-value="wifi" ng-repeat="wifi in wifidata.available" value="{{wifi.title}}">
                                                 <div layout="row" layout-align="start center">
@@ -261,7 +261,7 @@
                             </md-card-content>
                             <md-divider></md-divider>
                             <md-card-actions layout="column" layout-align="start">
-                                <md-button ng-click="connect($event)" ng-disabled1="canconnect()">Connect</md-button>
+                                <md-button ng-click="connect($event)" ng-disabled="!canconnect()">Connect</md-button>
                             </md-card-actions>
                         </md-card>
                     </div>
@@ -282,15 +282,16 @@
                 <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
             </div>
             <div ng-hide="processing" layout="row" layout-align="start center">
-                <div ng-show="connection.connected == true">
+                <div ng-show="connection.status == 2 && networkerror == false" >
                     <span class="card-subtitle" >Connection successful</span>
                     <p>
                         SSID : {{ condata.ssid }}<br>
-                        IP   : {{ connection.ip }}
+                        IP   : <a href="http://{{ connection.ip }}">{{ connection.ip }}</a>
                     </p>
-                    <span ng-show="connection.restart"  class="ng-hide">Controller will restart now for IP settings to take effect</span>
+                    <span ng-show="connection.restart"  class="ng-hide">Controller will restart now.</span>
+
                 </div>
-                <div ng-show="connection.connected == false">
+                <div ng-show="connection.status != 2 && networkerror == false">
                     <span class="card-subtitle" >Connection failed</span>
                     <p>
                         Could not connect to "{{ condata.ssid }}"<br>
@@ -312,6 +313,6 @@
         </md-dialog-actions>
     </md-dialog>
 </script>
-<script src="app.min.js?rel=0.1.0" type="text/javascript" ></script>
+<script src="app.min.js?rel={{ VERSION }}" type="text/javascript" ></script>
 
 </html>

@@ -49,7 +49,7 @@
     }
 
     </style>
-    <link href="app.min.css?rel=0.1.0" rel="stylesheet" />
+    <link href="app.min.css?rel={{ VERSION }}" rel="stylesheet" />
     <title>RGBWW Controller</title>
 </head>
 
@@ -365,11 +365,11 @@
                                 <md-card-content>
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding >Connected to</span>
-                                        <span >{{ rgbww.network.connection.ssid }}</span>
+                                        <span >{{ ctrlinfo.connection.ssid }}</span>
                                     </div>
                                     <div layout="row" layout-align="start center" >
                                         <span  flex="40" layout-padding >MAC</span>
-                                        <span >{{ rgbww.network.connection.mac }}</span>
+                                        <span >{{ ctrlinfo.connection.mac }}</span>
                                     </div>
                                     <div layout="row" layout-align="end center">
                                         <md-button ng-click="showConfirm($event, 'forget_wifi', 'Wifi Inforation (SSID, Password) will be deleted and Controller will restart in AccessPoint mode')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
@@ -593,10 +593,11 @@
                                         </md-icon> Information</span>
                                     </md-card-header-text>
                                 </md-card-header>
+
+
                                 <md-divider></md-divider>
+
                                 <md-card-content>
-
-
                                     <div style="margin-top:20px; margin-bottom:5px;">
                                         <span class="card-subtitle" >Settings </span>
                                     </div>
@@ -648,7 +649,7 @@
                                         </md-input-container>
                                     </div>
                                     <div layout="row"   layout-align="start center">
-                                        <md-button ng-disabled="!rgbww.security.settings_secured" class="md-raised" aria-label="Save Password" ng-click="saveSettings()" md-no-ink> Update </md-button>
+                                        <md-button ng-disabled="!rgbww.security.settings_secured" class="md-raised" aria-label="Save Password" ng-click="saveConfig()" md-no-ink> Update </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -668,28 +669,27 @@
                                 <md-card-content>
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">Firmware </span>
-                                        <span class="md-caption">{{ rgbww.info.version }}</span>
+                                        <span class="md-caption">{{ ctrlinfo.firmware }}</span>
                                     </div>
-
                                     <div layout="row" layout-align="start center" >
-                                        <span  flex="40" layout-padding class="md-caption">Config Version </span>
-                                        <span  class="md-caption">{{ rgbww.info.config_version }}</span>
+                                        <span flex="40" layout-padding class="md-caption">Web Interface </span>
+                                        <span class="md-caption">{{ webappversion }}</span>
                                     </div>
 
                                     <div layout="row" layout-align="start center" >
                                         <span  flex="40" layout-padding class="md-caption">RGBWW Version </span>
-                                        <span  class="md-caption">{{ rgbww.info.rgbww }}</span>
+                                        <span  class="md-caption">{{ ctrlinfo.rgbwwled }}</span>
                                     </div>
 
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">SMING Version </span>
-                                        <span  class="md-caption">{{ rgbww.info.sming }}</span>
+                                        <span  class="md-caption">{{ ctrlinfo.sming }}</span>
                                     </div>
                                     <div style="margin-top:20px; margin-bottom:5px;">
                                         <span class="card-subtitle" >Update Firmware </span>
                                     </div>
                                     <span class="md-caption">Be sure to only apply updates from trusted sources.</span>
-                                    <span class="md-caption">Official Firmware updates are available via Github</span>
+                                    <span class="md-caption">Official Firmware updates are available <a href="http://patrickjahns.github.io/esp_rgbww_firmware/index.html" target="_blank">via Github</a></span>
                                     <div layout="column" layout-align="center start" >
 
                                         <md-input-container style="width:100%; margin-bottom: 0px!important;">
@@ -712,10 +712,10 @@
 
     </div>
     <div >
-        <md-button ng-hide="tabs.selectedIndex == 0" hide-gt-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveSettings()" style="bottom: 8px; right:8px;"  aria-label="Save Settings">
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-gt-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveConfig()" style="bottom: 8px; right:8px;"  aria-label="Save Settings">
             <md-icon><svg-icon name="done"></svg-icon></md-icon>
         </md-button>
-        <md-button ng-hide="tabs.selectedIndex == 0" hide-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveSettings()"  aria-label="Save Settings">
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-xs class="md-fab md-warn md-fab-bottom-right" ng-click="saveConfig()"  aria-label="Save Settings">
             <md-icon><svg-icon name="done"></svg-icon></md-icon>
         </md-button>
 
@@ -724,7 +724,7 @@
 </div>
 
 </body>
-<script src="app.min.js?rel=0.1.0" type="text/javascript" ></script>
+<script src="app.min.js?rel={{ VERSION }}" type="text/javascript" ></script>
 
 
 </html>

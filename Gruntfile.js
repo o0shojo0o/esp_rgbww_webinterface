@@ -3,13 +3,28 @@ module.exports = function(grunt) {
 	
     grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
+        'string-replace': {
+            dist: {
+                files: [
+                    {expand: true, cwd: 'src/', src: 'main.js', dest: 'build/'},
+                    {expand: true, cwd: 'src/', src: 'init.html', dest: 'build/'},
+                    {expand: true, cwd: 'src/', src: 'index.html', dest: 'build/'}
+                ],
+                options: {
+                    replacements: [{
+                        pattern: /{{ VERSION }}/g,
+                        replacement: '<%= pkg.version %>'
+                    }]
+                }
+            }
+        },
         ngAnnotate: {
             options: {
                 singleQuotes: true
             },
             app: {
                 files: {
-                    'build/main-minsafe.js': ['src/main.js']
+                    'build/main-minsafe.js': ['build/main.js']
                 }
             }
         },
@@ -46,20 +61,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-		cachebreaker: {
-			dev: {
-				options: {
-					match: ['app.min.js', 'app.min.css'],
-					replacement: function (pkg){
-						
-						return pkg.version;
-					}
-				},
-				files: {
-					src: ['src/index.html', 'src/init.html' ]
-				}
-			}
-		},
+
         compress: {
             main: {
                 options: {
@@ -67,19 +69,19 @@ module.exports = function(grunt) {
                     level: 9
                 },
                 files: [
-                    {expand: true, cwd: 'src/', src: ['*.html'], dest:'dist', ext: '.html.gz'},
+                    {expand: true, cwd: 'build/', src: ['*.html'], dest:'dist', ext: '.html.gz'},
                     {expand: true, cwd: 'build/', src: ['app.min.js'], dest:'dist', ext: '.min.js.gz'},
                     {expand: true, cwd: 'build/', src: ['app.min.css'], dest:'dist', ext: '.min.css.gz'},
                 ]
             }
         },
     });
+    grunt.loadNpmTasks('grunt-string-replace');
     grunt.loadNpmTasks('grunt-contrib-concat'); // which NPM packages to load
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks('grunt-contrib-compress');
-	grunt.loadNpmTasks('grunt-cache-breaker');
 	grunt.registerTask('version', 'output version', function() {
 		pkg = grunt.file.readJSON('package.json');
 		grunt.file.write('VERSION', pkg.version);
@@ -87,6 +89,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('cleanup', 'cleanup tmp files', function() {
 		grunt.file.delete('build', [{force:true}]);
 	});
-    grunt.registerTask('default', ['ngAnnotate', 'concat', 'uglify', 'cssmin', 'cachebreaker', 'compress', 'cleanup']);
+    grunt.registerTask('default', ['string-replace', 'ngAnnotate', 'concat', 'uglify', 'cssmin', 'compress']);
 	grunt.registerTask('release', ['default', 'version']);
 };
