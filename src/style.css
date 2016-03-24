@@ -1,3 +1,10 @@
+.full-width {
+    width: 100%;
+}
+
+.savespinner > div > div {
+    left: 40%!important;
+}
 .cardselect {
     min-width:220px;
     margin:10px 0;

@@ -26,9 +26,10 @@ angular
                     delete newsettings.network.ap.password;
                 }
                 newsettings.restart = r;
-                $http.post('/config', newsettings).then(function(result){
-                    //TODO: error handling
+                return $http.post('/config', newsettings).then(function(result){
                     return true;
+                }, function(result) {
+                    return false;
                 });
             },
             getInfo: function() {
@@ -40,13 +41,12 @@ angular
                 scan = typeof scan !== 'undefined' ? scan : false;
                 if (scan == true) {
                     return $http.post('/networks', {cmd:'refresh'}).then(function(result) {
-                        //TODO: better error handling
                         if(result.data.success != true) {
                             return {};
                         }
                         var poll = function() {
                             return $timeout(function () {
-                                return $http.get('/networks').then(function (result) {
+                                return $http.get('/networks', {timeout: 10000}).then(function (result) {
                                     if (result.data.scanning == false) {
                                         return result.data;
                                     } else {
@@ -88,21 +88,39 @@ angular
             },
             connectWifi: function(ssid, password) {
                 var data = {ssid: ssid, password: password};
+                var retries = 0;
+                var retry = function(result) {
+                  if (retries < 3) {
+                      retries += 1;
+                      return poll();
+                  }
+                    return result;
+                };
+                var poll = function() {
+                    return $timeout(function () {
+                        return $http.get('/connect', {timeout: 10000}).then(function (result) {
+                            if (result.data.status != 1) {
+                                return result.data;
+                            } else {
+                                return poll();
+                            }
 
+                        }, function(result) {
+                            if (retries < 5) {
+                                retries++;
+                                return poll();
+                            }
+                            var data = {status: -1, error: 'network error'};
+                            return data;
+                        });
+                    }, 2000);
+                };
                 return $http.post('/connect', data).then(function(result) {
-                    var poll = function() {
-                        return $timeout(function () {
-                            return $http.get('/connect').then(function (result) {
-                                if (result.data.status != 1) {
-                                    return result.data;
-                                } else {
-                                    return poll();
-                                }
-
-                            });
-                        }, 2000);
-                    };
                     return poll();
+                }, function(result) {
+                    //failed to connect
+                    var data = {status: -1, error: 'network error'};
+                    return data;
                 });
             },
             systemcmd: function(cmd) {
@@ -112,7 +130,7 @@ angular
                 });
 
             },
-            intUpdate: function(update) {
+            initUpdate: function(update) {
                 return $http.post('/update', update).then(function(result) {
                     return result.data;
              })
@@ -121,13 +139,27 @@ angular
                 return $http.get('/update').then(function(result) {
                     return result.data;
                 })
+            },
+            is_connected: function() {
+                $http.get('/ping').then(function(result){
+                    if(!safeObjectPath(result.data, "ping")) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                }, function(result){
+                    return false;
+                })
             }
+
         }
     })
-    .controller('mainCtrl', function($scope, $mdSidenav, $timeout, $mdDialog, espcon) {
+    .controller('mainCtrl', function($scope, $mdSidenav, $timeout, $mdDialog, $http, espcon) {
         var init = function () {
             $scope.saving = false;
             $scope.webappversion = version;
+            $scope.update = {url: updateurl };
             $scope.color = new tinycolor("rgb (0, 0, 0)");
             $scope.hsvcolor = { whitebalance: 0 };
             //TODO: make this dynamic and move the generation to firmware
@@ -152,6 +184,7 @@ angular
                 $scope.$broadcast( 'mdColorPicker:colorSet');
             });
 
+
         };
 
 
@@ -171,19 +204,81 @@ angular
         };
         $scope.saveConfig = function() {
             $scope.saving = true;
-            espcon.saveConfig($scope.rgbww, true).then(function(data){
+            espcon.saveConfig($scope.rgbww, true).then(function(result){
                 //Success
-                $scope.saving = false;
-            }, function(data){
-                //Error - show error dialog?
+                if(result) {
+                    console.log("success")
+                } else {
+                    console.log("failure")
+                }
                 $scope.saving = false;
             });
         };
-        $scope.update = function(url) {
-            //TODO: fetch json from url, compare version numbers and then only update
-            //TODO: post json to controller, then fetch regularly the status and show to user
-        };
 
+        $scope.initUpdate = function(ev) {
+            var url = $scope.update.url;
+            var fwversion = $scope.ctrlinfo.firmware;
+            var webappversion = $scope.webappversion;
+            $mdDialog.show({
+                controller: OTACtrl,
+                templateUrl: 'otadialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                locals: {
+                    url: url,
+                    fwversion: fwversion,
+                    webappversion: webappversion
+                },
+                clickOutsideToClose:false
+            });
+
+        };
+        function OTACtrl($scope, $mdDialog, $http, espcon, url, fwversion, webappversion) {
+            var init  = function() {
+                $scope.processing = true;
+                $scope.error = false;
+                $scope.updateinfo = {};
+                $scope.fwversion = fwversion;
+                $scope.webappversion = webappversion;
+                $http.get(url).then(function(result) {
+                    //check for valid
+                   var data = result.data;
+                    if (!safeObjectPath(data, "rom.version") || !safeObjectPath(data, "rom.url") ||
+                        !safeObjectPath(data, "webapp.version") || !safeObjectPath(data, "webapp.url")) {
+                        $scope.error = "received malformed response";
+                    }
+                    else
+                    {
+
+                        $scope.updateinfo = data;
+                    }
+                    $scope.processing = false;
+
+                }, function(result) {
+                    $scope.processing = false;
+                    if(result.status != -1) {
+                        $scope.error = result.status + " " + result.statusText;
+                    } else {
+                        $scope.error = "Network error - please check your connection"
+                    }
+
+                });
+
+            };
+
+            //TODO: post json to controller, then fetch regularly the status and show to user
+
+
+            $scope.processupdate = function() {
+                console.log($scope.updateinfo);
+                //espcon.initUpdate()
+            };
+
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+            init();
+        }
 
         $scope.showConfirm = function(ev, cmd, msg) {
             var confirm = $mdDialog.confirm()
@@ -303,12 +398,15 @@ angular
             $scope.condata = wifi;
             $scope.networkerror = false;
             espcon.connectWifi(wifi.ssid, wifi.password).then( function(data) {
+
                 $scope.connection = data;
+                if(data.status == 2) {
+                    espcon.systemcmd("stopapandrestart");
+                } else if(data.status == -1) {
+                    $scope.networkerror = true;
+                }
                 $scope.processing = false;
 
-            }, function(data) {
-                $scope.processing = false;
-                $scope.networkerror = true;
             });
 
             $scope.cancel = function() {
@@ -355,6 +453,62 @@ angular
             restrict: 'E'
         };
     });
+
+/*
+ General needed vars and helpers
+ */
+
+//https://coderwall.com/p/cvbgia/object-path-validation-a-solution-to-validate-deep-objects
+var safeObjectPath = function safeObjectPath( object, properties ) {
+    var path = [],
+        root = object,
+        prop;
+
+    if ( !root ) {
+        // if the root object is null we immediately returns
+        return false;
+    }
+
+    if ( typeof properties === 'string' ) {
+        // if a string such as 'foo.bar.baz' is passed,
+        // first we convert it into an array of property names
+        path = properties ? properties.split('.') : [];
+    } else {
+        if ( Object.prototype.toString.call( properties ) === '[object Array]' ) {
+            // if an array is passed, we don't need to do anything but
+            // to assign it to the internal array
+            path = properties;
+        } else {
+            if ( properties ) {
+                // if not a string or an array is passed, and the parameter
+                // is not null or undefined, we return with false
+                return false;
+            }
+        }
+    }
+
+    // if the path is valid or empty we return with true (because the
+    // root object is itself a valid path); otherwise false is returned.
+    while ( prop = path.shift() ) {
+        // UPDATE: before it was used only the if..else statement, but
+        // could generate an exception if a inexistent member was found.
+        // Now I fixed with a try..catch statement. Thanks to @tarikozket
+        // (https://coderwall.com/tarikozket) for the contribution!
+        try {
+            if ( prop in root ) {
+                root = root[prop];
+            } else {
+                return false;
+            }
+        } catch(e) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+var updateurl = "http://patrickjahns.github.io/esp_rgbww_firmware/release/version.json";
 var version = "{{ VERSION }}";
 
 var icons = {

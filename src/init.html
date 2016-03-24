@@ -36,14 +36,11 @@
     .animate-hide {
         transition: all linear 0.5s;
         opacity: 1;
-
-
     }
 
     .animate-hide.ng-hide {
         line-height: 0;
         opacity: 0;
-
     }
 
     @-webkit-keyframes sk-bouncedelay {
@@ -278,37 +275,42 @@
  <md-dialog aria-label="Connection Dialog" style="min-width:300px">
         <md-dialog-content >
         <div class="md-dialog-content" >
-            <div layout="row" layout-align="center center" style="min-height:200px;" ng-hide="!processing">
+            <div layout="row" layout-align="center center" style="min-height:200px;" ng-hide="processing == false">
                 <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
             </div>
-            <div ng-hide="processing" layout="row" layout-align="start center">
-                <div ng-show="connection.status == 2 && networkerror == false" >
+            <div ng-hide="processing == true" layout="row" layout-align="start center">
+                <div ng-show="connection.status == 2 && networkerror == false" class="ng-hide">
                     <span class="card-subtitle" >Connection successful</span>
-                    <p>
-                        SSID : {{ condata.ssid }}<br>
-                        IP   : <a href="http://{{ connection.ip }}">{{ connection.ip }}</a>
-                    </p>
-                    <span ng-show="connection.restart"  class="ng-hide">Controller will restart now.</span>
+                    <div layout="row" layout-align="start center" style="padding-top: 25px">
+                        <span flex="40" layout-padding>SSID :</span>
+                        <span>{{ condata.ssid }}</span>
+
+                    </div>
+                    <div layout="row" layout-align="start center" style="padding-bottom: 25px">
+                        <span flex="40" layout-padding> IP   :</span>
+                        <span><a href="http://{{ connection.ip }}">{{ connection.ip }}</a></span>
+                    </div>
+                    <span>Controller will restart now.</span>
 
                 </div>
-                <div ng-show="connection.status != 2 && networkerror == false">
+                <div ng-show="connection.status != 2 && networkerror == false" class="ng-hide">
                     <span class="card-subtitle" >Connection failed</span>
-                    <p>
-                        Could not connect to "{{ condata.ssid }}"<br>
-                        Error: {{ connection.error }}
+                    <p style="padding-top: 20px">
+                        <span>Could not connect to "{{ condata.ssid }}"</span><br><br>
+                        <span>Error: {{ connection.error }}</span>
                     </p>
                 </div>
                 <div ng-show="networkerror == true" class="ng-hide">
                     <span class="card-subtitle" >Connection failed</span>
                     <p>
-                        There was an error with the network connection.
-                        Please try again
+                        There was an error with the network connection.<br>
+                        Please check your connection and try again
                     </p>
                 </div>
             </div>
         </div>
         </md-dialog-content>
-        <md-dialog-actions ng-show="connection.connected == false || networkerror == true" class="ng-hide">
+        <md-dialog-actions ng-show="connection.status != 2 && processing == false" class="ng-hide">
             <md-button ng-click="cancel()" class="md-primary" >OK</md-button>
         </md-dialog-actions>
     </md-dialog>
