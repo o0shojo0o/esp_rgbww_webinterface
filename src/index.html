@@ -150,10 +150,6 @@
                                         </div>
                                     </div>
                                 </md-card-content>
-                                <md-divider></md-divider>
-                                <md-card-content style="padding-top:0px;">
-                                    Input Fields
-                                </md-card-content>
                             </md-card>
                         </div>
                     </div>
@@ -452,24 +448,10 @@
                                 <md-card-content>
                                     <div style="margin-top:10px;" layout="row"  layout-align="center center">
                                         <div>
-                                            <span class="card-subtitle" >Tcp Server</span>
-                                        </div>
-                                        <div flex></div>
-                                        <md-switch class="md-primary" md-no-ink aria-label="Tcp Server" ng-model="rgbww.network.tcpserver.enabled"></md-switch>
-                                    </div>
-                                    <div style="margin-top:10px;" layout="row"  layout-align="center center">
-                                        <div>
-                                            <span class="card-subtitle" >Udp Server</span>
-                                        </div>
-                                        <div flex></div>
-                                        <md-switch class="md-primary" md-no-ink aria-label="Udp Server" ng-model="rgbww.network.udpserver.enabled"></md-switch>
-                                    </div>
-                                    <div style="margin-top:10px;" layout="row"  layout-align="center center">
-                                        <div>
                                             <span class="card-subtitle" >MQTT</span>
                                         </div>
                                         <div flex></div>
-                                        <md-switch class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                        <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
                                     </div>
                                     <div layout="row"  layout-align="center center">
 
@@ -678,7 +660,7 @@
 
                                     <div layout="row" layout-align="start center" >
                                         <span  flex="40" layout-padding class="md-caption">RGBWW Version </span>
-                                        <span  class="md-caption">{{ ctrlinfo.rgbwwled }}</span>
+                                        <span  class="md-caption">{{ ctrlinfo.rgbww.version }}</span>
                                     </div>
 
                                     <div layout="row" layout-align="start center" >
@@ -738,47 +720,74 @@
     <md-dialog aria-label="Ota Dialog" style="min-width:300px">
         <md-dialog-content >
             <div class="md-dialog-content" >
-                <div layout="row" layout-align="center center" style="min-height:200px;" ng-hide="!processing">
-                    <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
+                <div class="ng-hide" ng-show="step == 0">
+                    <div layout="row" layout-align="center center" style="min-height:200px;" ng-show="processing == true " class="ng-hide">
+                        <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
+                    </div>
+                    <div ng-show="processing == false" layout="row" layout-align="start center" class="ng-hide">
+                        <div ng-show="error != false" class="ng-hide full-width">
+                            <span class="card-subtitle" >Error</span>
+                            <p>
+                                <br>{{ error }}<br>
+                            </p>
+                        </div>
+                        <div ng-show="error == false" class="ng-hide full-width">
+                            <span class="card-subtitle" >OTA Information</span>
+                            <br><br>
+                            <div layout="row" layout-align="start center" style="padding-top: 10px">
+                                <span  flex="40" layout-padding class="md-caption"></span>
+                                <span  flex="30" class="md-caption">Current</span>
+                                <span  flex="30" class="md-caption">OTA</span>
+                            </div>
+                            <div layout="row" layout-align="start center" >
+
+                                <span flex="40" layout-padding class="md-caption">Firmware </span>
+                                <span flex="30" class="md-caption">{{ fwversion }}</span>
+                                <span flex="30" class="md-caption">{{ updateinfo.rom.version }}</span>
+                            </div>
+                            <div layout="row" layout-align="start center" >
+                                <span flex="40" layout-padding class="md-caption">Web Interface </span>
+                                <span flex="30" class="md-caption">{{ webappversion }}</span>
+                                <span flex="30" class="md-caption">{{ updateinfo.webapp.version }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div ng-hide="processing" layout="row" layout-align="start center">
-                    <div ng-show="error != false" class="ng-hide full-width">
+                <div class="ng-hide" ng-show="step == 1">
+                    <div ng-show="error != false && processing == false" class="ng-hide full-width">
                         <span class="card-subtitle" >Error</span>
                         <p>
                             <br>{{ error }}<br>
                         </p>
                     </div>
                     <div ng-show="error == false" class="ng-hide full-width">
-                        <span class="card-subtitle" >OTA Information</span>
+                        <span class="card-subtitle" >OTA</span>
                         <br><br>
-                        <div layout="row" layout-align="start center" style="padding-top: 10px">
-                            <span  flex="40" layout-padding class="md-caption"></span>
-                            <span  flex="30" class="md-caption">Current</span>
-                            <span  flex="30" class="md-caption">OTA</span>
-                        </div>
+
                         <div layout="row" layout-align="start center" >
 
                             <span flex="40" layout-padding class="md-caption">Firmware </span>
-                            <span flex="30" class="md-caption">{{ fwversion }}</span>
-                            <span flex="30" class="md-caption">{{ updateinfo.rom.version }}</span>
+                            <span flex="60" class="md-caption">{{ updateprogress.rom }}</span>
                         </div>
                         <div layout="row" layout-align="start center" >
                             <span flex="40" layout-padding class="md-caption">Web Interface </span>
-                            <span flex="30" class="md-caption">{{ webappversion }}</span>
-                            <span flex="30" class="md-caption">{{ updateinfo.webapp.version }}</span>
+                            <span flex="60" class="md-caption">{{ updateprogress.webapp }}</span>
+                        </div>
+                        <br>
+                        <div class="ng-hide" ng-show="processing == false && step == 1">
+                            Controller will restart automatically
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
         </md-dialog-content>
-
-        <md-dialog-actions ng-show="error != false && processing == false" class="ng-hide">
+        <md-dialog-actions ng-show="error != false && processing == false " class="ng-hide">
             <md-button  ng-click="cancel()" class="md-primary" >OK</md-button>
         </md-dialog-actions>
-        <md-dialog-actions ng-show="error == false && processing == false" class="ng-hide">
+        <md-dialog-actions ng-show="processing == false && step == 1" class="ng-hide">
+            <md-button  ng-click="cancel()" class="md-primary" >OK</md-button>
+        </md-dialog-actions>
+        <md-dialog-actions ng-show="error == false && processing == false && step == 0" class="ng-hide">
 
             <md-button  ng-click="cancel()" class="md-primary" >Cancel</md-button>
             <md-button  ng-click="processupdate()" class="md-primary" >Update</md-button>

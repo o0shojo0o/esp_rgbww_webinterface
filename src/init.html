@@ -99,10 +99,10 @@
 
                                         <md-select ng-disabled="netloading || wifidata.scanning != false" ng-model="wnetwork" id="wifiselect" >
                                             <label show-xs>Available Wifi</label>
-                                            <md-option ng-value="wifi" ng-repeat="wifi in wifidata.available" value="{{wifi.title}}">
+                                            <md-option ng-value="wifi" ng-repeat="wifi in wifidata.available" value="{{wifi.ssid}}">
                                                 <div layout="row" layout-align="start center">
                                                     <wifi-icon signal="{{wifi.signal}}" secured="{{wifi.encryption}}"></wifi-icon>
-                                                    <span style="padding-left: 10px;">{{wifi.title}}</span>
+                                                    <span style="padding-left: 10px;">{{wifi.ssid}}</span>
                                                 </div>
                                             </md-option>
                                         </md-select>
@@ -110,12 +110,22 @@
 
 
                                 </div>
-                                <div layout="row" layout-align="start center" ng-hide="wnetwork.encryption == 'OPEN' ">
+                                <div layout="row" layout-align="start center">
                                     <div flex class="inputlabel" >
-                                        <span ng-disabled="wnetwork.encryption == 'OPEN' || netloading" >Password</span>
+                                        <span>SSID</span>
                                     </div>
                                     <md-input-container class="cardinput">
-                                        <input type="text" ng-disabled="wnetwork.encryption == 'OPEN' || netloading" ng-model="wifi.password" aria-label="Wifi Password">
+                                        <input type="text" ng-disabled="netloading" ng-model="wnetwork.ssid" aria-label="Wifi SSID">
+
+                                    </md-input-container>
+
+                                </div>
+                                <div layout="row" layout-align="start center">
+                                    <div flex class="inputlabel" >
+                                        <span>Password</span>
+                                    </div>
+                                    <md-input-container class="cardinput">
+                                        <input type="text" ng-disabled="netloading" ng-model="wlandata.password" aria-label="Wifi Password">
 
                                     </md-input-container>
 
@@ -186,24 +196,10 @@
                             <md-card-content>
                                 <div style="margin-top:10px;" layout="row"  layout-align="center center">
                                     <div>
-                                        <span class="card-subtitle" >Tcp Server</span>
-                                    </div>
-                                    <div flex></div>
-                                    <md-switch class="md-primary" md-no-ink aria-label="Tcp Server" ng-model="rgbww.network.tcpserver.enabled"></md-switch>
-                                </div>
-                                <div style="margin-top:10px;" layout="row"  layout-align="center center">
-                                    <div>
-                                        <span class="card-subtitle" >Udp Server</span>
-                                    </div>
-                                    <div flex></div>
-                                    <md-switch class="md-primary" md-no-ink aria-label="Udp Server" ng-model="rgbww.network.udpserver.enabled"></md-switch>
-                                </div>
-                                <div style="margin-top:10px;" layout="row"  layout-align="center center">
-                                    <div>
                                         <span class="card-subtitle" >MQTT</span>
                                     </div>
                                     <div flex></div>
-                                    <md-switch class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                    <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
                                 </div>
                                 <div ng-hide="!rgbww.network.mqtt.enabled" class="ng-hide animate-hide">
                                     <div layout="row"  layout-align="center center">

@@ -40,7 +40,7 @@ angular
             getNetworks: function(scan) {
                 scan = typeof scan !== 'undefined' ? scan : false;
                 if (scan == true) {
-                    return $http.post('/networks', {cmd:'refresh'}).then(function(result) {
+                    return $http.post('/scan_networks', {cmd:'refresh'}).then(function(result) {
                         if(result.data.success != true) {
                             return {};
                         }
@@ -57,6 +57,8 @@ angular
                             }, 2000);
                         };
                         return poll();
+                    }, function (result) {
+                        return {};
                     });
                 } else {
                     return $http.get('/networks').then(function (result) {
@@ -67,35 +69,28 @@ angular
             setColor: function(color, colortemp) {
                 var hsv = color.toHsv();
                 var data  = {
-                    color: {
+                    hsv: {
                         h: hsv.h.toFixed(2),
                         s: Math.round(hsv.s * 100),
                         v: Math.round(hsv.v * 100),
-                        k: colortemp
+                        ct: colortemp
                     },
-                    cmd: {
-                        t: 700
-                    }
+                    cmd: "fade",
+                    t: 700
+
                 };
                 return $http.post('/color', data).then(function (result) {
                     return result.data;
                 })
             },
             getColor: function() {
-                return $http.get('/color').then(function(result) {
+                return $http.get('/color?mode=hsv').then(function(result) {
                     return result.data;
                 });
             },
             connectWifi: function(ssid, password) {
                 var data = {ssid: ssid, password: password};
                 var retries = 0;
-                var retry = function(result) {
-                  if (retries < 3) {
-                      retries += 1;
-                      return poll();
-                  }
-                    return result;
-                };
                 var poll = function() {
                     return $timeout(function () {
                         return $http.get('/connect', {timeout: 10000}).then(function (result) {
@@ -133,7 +128,7 @@ angular
             initUpdate: function(update) {
                 return $http.post('/update', update).then(function(result) {
                     return result.data;
-             })
+                })
             },
             getUpdatestatus: function() {
                 return $http.get('/update').then(function(result) {
@@ -170,7 +165,7 @@ angular
                 $scope.ctrlinfo = data;
             });
             espcon.getConfig().then(function(data){
-                //TODO: check for error and how dialog
+                //TODO: check for error and show dialog
                 $scope.rgbww = data;
             }, function(data){
                 //TODO: error - show dialog
@@ -178,9 +173,9 @@ angular
             });
 
             espcon.getColor().then(function(data){
-                //TODO: check for error and how dialog
-                $scope.color = new tinycolor({ h: data.color.h, s: data.color.s, v: data.color.v });
-                $scope.hsvcolor.whitebalance = data.color.k;
+                //TODO: check for error and show dialog
+                $scope.color = new tinycolor({ h: data.hsv.h, s: data.hsv.s, v: data.hsv.v });
+                $scope.hsvcolor.whitebalance = data.hsv.ct;
                 $scope.$broadcast( 'mdColorPicker:colorSet');
             });
 
@@ -235,9 +230,13 @@ angular
         };
         function OTACtrl($scope, $mdDialog, $http, espcon, url, fwversion, webappversion) {
             var init  = function() {
+                // 0 = checking url
+                // 1 = processing update
+                $scope.step = 0;
                 $scope.processing = true;
                 $scope.error = false;
                 $scope.updateinfo = {};
+                $scope.updateprogress = {};
                 $scope.fwversion = fwversion;
                 $scope.webappversion = webappversion;
                 $http.get(url).then(function(result) {
@@ -249,7 +248,7 @@ angular
                     }
                     else
                     {
-
+                        //$scope.updateprogress = {rom: ota_text[1], webapp: ota_text[1]};
                         $scope.updateinfo = data;
                     }
                     $scope.processing = false;
@@ -267,11 +266,37 @@ angular
             };
 
             //TODO: post json to controller, then fetch regularly the status and show to user
+            var poll = function() {
+                $timeout(function () {
+                    $http.get('/update', {timeout: 5000}).then(function (result) {
+                        if (result.data.ota_status == 1) {
+                            poll();
+                        } else {
+                            $scope.processing = false;
+                        };
+                        $scope.updateprogress = {rom: ota_text[result.data.rom_status],
+                                            webapp: ota_text[result.data.webapp_status]};
 
+                    }).then(function(result){
+                        poll();
+                    });
+                }, 1000);
+            };
 
             $scope.processupdate = function() {
-                console.log($scope.updateinfo);
-                //espcon.initUpdate()
+                $scope.step = 1;
+                $scope.processing = true;
+                $scope.error = false;
+
+                espcon.initUpdate($scope.updateinfo).then(function(result){
+                    $scope.error = false;
+                    $scope.processing = true;
+                    poll();
+                }, function(result){
+                    $scope.error = "Network error - please check your connection"
+                    $scope.processing = false;
+                });
+
             };
 
             $scope.cancel = function() {
@@ -333,13 +358,15 @@ angular
             $scope.netloading = true;
 
             $scope.wnetwork = {
-                title: "",
+                ssid: "",
                 id: "",
-                encryption: "OPEN"
-            };
-            $scope.wifi = {
+                encryption: "OPEN",
                 password: ""
             };
+
+            $scope.wlandata = {
+                password: ""
+            }
             espcon.getConfig().then(function(data){
                 $scope.rgbww = data;
             }, function(data){
@@ -356,10 +383,8 @@ angular
         $scope.refreshnetwork = function(rescan) {
             $scope.netloading = true;
             espcon.getNetworks(rescan).then(function(data){
+                //TODO show message if error
                 $scope.wifidata = data;
-                $scope.netloading = false;
-            }, function(data){
-                $scope.wifidata = {};
                 $scope.netloading = false;
             });
         };
@@ -368,8 +393,8 @@ angular
         $scope.connect = function(ev) {
             espcon.saveConfig($scope.rgbww, false);
             var wifi = {
-                ssid: $scope.wnetwork.title,
-                password: $scope.wifi.password
+                ssid: $scope.wnetwork.ssid,
+                password: $scope.wlandata.password
             };
             $mdDialog.show({
                 controller: ConnectionCtrl,
@@ -385,7 +410,7 @@ angular
 
         $scope.canconnect = function() {
 
-            if ($scope.wnetwork.title != "" &&($scope.wnetwork.encryption == "OPEN" ||  ($scope.wnetwork.encryption != "OPEN" && $scope.wifi.password != "" )))
+            if ($scope.wnetwork.ssid != "" &&($scope.wnetwork.encryption == "OPEN" ||  ($scope.wnetwork.encryption != "OPEN" && $scope.wnetwork.password != "" )))
             {
                 return true;
             }
@@ -510,6 +535,13 @@ var safeObjectPath = function safeObjectPath( object, properties ) {
 
 var updateurl = "http://patrickjahns.github.io/esp_rgbww_firmware/release/version.json";
 var version = "{{ VERSION }}";
+
+var ota_text = {
+    0: "not updating",
+    1: "update in progress",
+    2: "update successful",
+    3: "update failed"
+}
 
 var icons = {
     developer_board:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zm-4 10H4V5h14v14zM6 13h5v4H6zm6-6h4v3h-4zM6 7h5v5H6zm6 4h4v6h-4z"/></svg>',
