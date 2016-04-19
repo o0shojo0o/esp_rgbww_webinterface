@@ -210,6 +210,10 @@ angular
             });
         };
 
+        $scope.forget_wifi = function(ev) {
+
+        }
+
         $scope.initUpdate = function(ev) {
             var url = $scope.update.url;
             var fwversion = $scope.ctrlinfo.firmware;
@@ -264,25 +268,25 @@ angular
                 });
 
             };
-
-            //TODO: post json to controller, then fetch regularly the status and show to user
+            $scope.updateprogress = {"rom":ota_text[0], "webapp":ota_text[0]};
             var poll = function() {
-                $timeout(function () {
-                    $http.get('/update', {timeout: 5000}).then(function (result) {
-                        if (result.data.ota_status == 1) {
+                $timeout(function() {
+                    espcon.getUpdatestatus().then(function (result) {
+                        $scope.updateprogress.rom = ota_text[result.rom_status];
+                        $scope.updateprogress.webapp = ota_text[result.ota_status];
+                        if (result.ota_status == 1) {
                             poll();
                         } else {
                             $scope.processing = false;
-                        };
-                        $scope.updateprogress = {rom: ota_text[result.data.rom_status],
-                                            webapp: ota_text[result.data.webapp_status]};
+                            $scope.error = false;
+                        }
 
-                    }).then(function(result){
-                        poll();
-                    });
+                    }, function (result) {
+                        $scope.processing = false;
+                        $scope.error = "Network error - please check your connection"
+                    })
                 }, 1000);
-            };
-
+            }
             $scope.processupdate = function() {
                 $scope.step = 1;
                 $scope.processing = true;
@@ -291,6 +295,8 @@ angular
                 espcon.initUpdate($scope.updateinfo).then(function(result){
                     $scope.error = false;
                     $scope.processing = true;
+                    $scope.updateprogress.rom = ota_text[0];
+                    $scope.updateprogress.webapp = ota_text[0];
                     poll();
                 }, function(result){
                     $scope.error = "Network error - please check your connection"

@@ -652,6 +652,7 @@
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">Firmware </span>
                                         <span class="md-caption">{{ ctrlinfo.firmware }}</span>
+                                        <span ng-show="ctrlinfo.git_version != 'unknown'" class="md-caption ng-hide">&nbsp;&nbsp;({{ ctrlinfo.git_version }})</span>
                                     </div>
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">Web Interface </span>
@@ -781,9 +782,6 @@
                 </div>
             </div>
         </md-dialog-content>
-        <md-dialog-actions ng-show="error != false && processing == false " class="ng-hide">
-            <md-button  ng-click="cancel()" class="md-primary" >OK</md-button>
-        </md-dialog-actions>
         <md-dialog-actions ng-show="processing == false && step == 1" class="ng-hide">
             <md-button  ng-click="cancel()" class="md-primary" >OK</md-button>
         </md-dialog-actions>
