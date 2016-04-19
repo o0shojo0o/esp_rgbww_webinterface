@@ -278,7 +278,9 @@ angular
                             poll();
                         } else {
                             $scope.processing = false;
-                            $scope.error = false;
+                            if (result.ota_status == 3) {
+                                $scope.error = "OTA Failed - please try again"
+                            }
                         }
 
                     }, function (result) {
