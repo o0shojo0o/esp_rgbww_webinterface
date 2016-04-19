@@ -295,8 +295,8 @@ angular
                 espcon.initUpdate($scope.updateinfo).then(function(result){
                     $scope.error = false;
                     $scope.processing = true;
-                    $scope.updateprogress.rom = ota_text[0];
-                    $scope.updateprogress.webapp = ota_text[0];
+                    $scope.updateprogress.rom = "...";
+                    $scope.updateprogress.webapp = "...";
                     poll();
                 }, function(result){
                     $scope.error = "Network error - please check your connection"
