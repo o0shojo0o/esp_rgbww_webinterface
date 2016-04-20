@@ -57,8 +57,6 @@ angular
                             }, 2000);
                         };
                         return poll();
-                    }, function (result) {
-                        return {};
                     });
                 } else {
                     return $http.get('/networks').then(function (result) {
@@ -157,7 +155,6 @@ angular
             $scope.update = {url: updateurl };
             $scope.color = new tinycolor("rgb (0, 0, 0)");
             $scope.hsvcolor = { whitebalance: 0 };
-            //TODO: make this dynamic and move the generation to firmware
             $scope.colormodes = [{title:"RGB", id:0}, {title:"RGBWW", id:1}, {title:"RGBCW", id:2}, {title:"RGBWWCW", id:3}];
             $scope.hsvmodes = [{title:"Normal", id:0},{title:"Spektrum", id:1},{title:"Rainbow", id:2}];
             espcon.getInfo().then(function(data) {
@@ -312,16 +309,43 @@ angular
             };
             init();
         }
+        function OkCancelCtrl($scope, $mdDialog, espcon, info) {
+            $scope.dialog = {"title": info.title, "msg": info.msg, "buttons":true}
+            var close = typeof info.msg_success !== 'undefined' ? false : true;
 
-        $scope.showConfirm = function(ev, cmd, msg) {
-            var confirm = $mdDialog.confirm()
-                .textContent(msg)
-                .ariaLabel('Reset Controller')
-                .targetEvent(ev)
-                .ok('OK')
-                .cancel('CANCEL');
-            $mdDialog.show(confirm).then(function() {
-                espcon.systemcmd(cmd);
+            $scope.ok = function() {
+                espcon.systemcmd(info.cmd);
+                if(close == true) {
+                    $mdDialog.hide();
+                }
+                else
+                {
+                    $scope.dialog.buttons = false;
+                    $scope.dialog.msg = info.msg_success;
+                }
+
+            }
+            $scope.cancel = function() {
+                $mdDialog.cancel();
+            };
+        }
+
+        $scope.showConfirm = function(ev, title, cmd, msg, msg_success) {
+            var info = {
+                "title": title,
+                "cmd": cmd,
+                "msg": msg,
+                "msg_success": msg_success
+            }
+            $mdDialog.show({
+                controller: OkCancelCtrl,
+                templateUrl: 'okcancledialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                locals: {
+                    info: info
+                },
+                clickOutsideToClose:false
             });
         };
 
@@ -360,11 +384,11 @@ angular
         init();
 
     })
-    .controller('initCtrl', function($scope,$mdDialog, espcon) {
+    .controller('initCtrl', function($scope, $mdDialog, $mdToast, espcon) {
         var init = function () {
             $scope.webappversion = version;
             $scope.netloading = true;
-
+            var error = false;
             $scope.wnetwork = {
                 ssid: "",
                 id: "",
@@ -378,11 +402,21 @@ angular
             espcon.getConfig().then(function(data){
                 $scope.rgbww = data;
             }, function(data){
+                if(error == false) {
+                    $mdToast.showSimple('Network error - please reload');
+                    error = true;
+                }
+
                 $scope.rgbww = {};
+
             });
             espcon.getInfo().then(function(data) {
-                //TODO error handling
                 $scope.ctrlinfo = data;
+            }, function(data){
+                if(error == false) {
+                    $mdToast.showSimple('Network error - please reload');
+                    error = true;
+                }
             });
             $scope.refreshnetwork(false);
         };
@@ -391,9 +425,14 @@ angular
         $scope.refreshnetwork = function(rescan) {
             $scope.netloading = true;
             espcon.getNetworks(rescan).then(function(data){
-                //TODO show message if error
                 $scope.wifidata = data;
                 $scope.netloading = false;
+            }, function(data){
+                if(error == false) {
+                    $mdToast.showSimple('Error fetching wifi networks');
+                    error = true;
+                }
+
             });
         };
 
@@ -418,7 +457,8 @@ angular
 
         $scope.canconnect = function() {
 
-            if ($scope.wnetwork.ssid != "" &&($scope.wnetwork.encryption == "OPEN" ||  ($scope.wnetwork.encryption != "OPEN" && $scope.wnetwork.password != "" )))
+            if ( error = false && (($scope.wnetwork.ssid != "" &&($scope.wnetwork.encryption == "OPEN") ||
+                    ($scope.wnetwork.encryption != "OPEN" && $scope.wnetwork.password != "" ))))
             {
                 return true;
             }

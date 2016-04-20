@@ -189,7 +189,7 @@
                                         </md-input-container>
                                         <div hide-gt-xs style="width:30px"></div>
                                     </div>
-
+                                    <div ng-hide="rgbww.color.hsv.model == 2">
                                     <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start" style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel" >
                                             <span>Red</span>
@@ -232,7 +232,7 @@
                                         <md-slider ng-model="rgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
                                         </md-slider>
                                     </div>
-
+                                    </div>
                                 </md-card-content>
                             </md-card>
                         </div>
@@ -368,7 +368,7 @@
                                         <span >{{ ctrlinfo.connection.mac }}</span>
                                     </div>
                                     <div layout="row" layout-align="end center">
-                                        <md-button ng-click="showConfirm($event, 'forget_wifi', 'Wifi Information (SSID, Password) will be deleted and Controller will restart in AccessPoint mode')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
+                                        <md-button ng-click="showConfirm($event, 'Forget wifi', 'forget_wifi', 'Wifi information (SSID, Password) will be deleted and controller will restart in access point mode', 'Controller will restart<br>For configuration please connect to controller accesspoint')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
                                     </div>
                                     <div style="margin-top:15px;" layout="row"  layout-align="center center">
                                         <div>
@@ -592,9 +592,9 @@
                                         <span class="card-subtitle" >System </span>
                                     </div>
                                     <div layout="row"   layout-align="end center" layout-padding>
-                                        <md-button ng-click="showConfirm($event, 'restart', 'This will restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
+                                        <md-button ng-click="showConfirm($event, 'Restart','restart', 'Press ok to restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
 
-                                        <md-button ng-click="showConfirm($event, 'reset', 'This will reset all Settings and restart the Controller in AccessPoint Mode')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
+                                        <md-button ng-click="showConfirm($event, 'Reset controller', 'reset', 'This will reset all settings and restart the controller in access point mode', 'Setting resetted - controller will restart now. <br>For configuration please connect to controller accesspoint')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -717,6 +717,22 @@
 </div>
 
 </body>
+<script type="text/ng-template" id="okcancledialog.html">
+    <md-dialog aria-label="Ota Dialog" style="min-width:300px">
+        <md-dialog-content >
+            <div class="md-dialog-content" >
+                <span class="card-subtitle" >{{ dialog.title }}</span>
+                    <p style="padding-top: 20px">
+                        {{ dialog.msg }}
+                    </p>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions ng-hide="dialog.buttons == false">
+            <md-button  ng-click="ok()" class="md-primary" >OK</md-button>
+            <md-button  ng-click="cancel()" class="md-primary" >Cancel</md-button>
+        </md-dialog-actions>
+    </md-dialog>
+</script>
 <script type="text/ng-template" id="otadialog.html">
     <md-dialog aria-label="Ota Dialog" style="min-width:300px">
         <md-dialog-content >
