@@ -139,21 +139,21 @@
                                     </div>
                                     <md-input-container class="cardinput">
 
-                                        <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.network.connection.dhcp"></md-switch>
+                                        <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="esprgbww.network.connection.dhcp"></md-switch>
 
                                     </md-input-container>
 
                                 </div>
-                                <div ng-show="rgbww.network.connection.dhcp == false" class="ng-hide animate-hide">
+                                <div ng-show="esprgbww.network.connection.dhcp == false" class="ng-hide animate-hide">
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">IP Address</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">IP Address</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.ip" aria-label="Controller IP">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.ip" aria-label="Controller IP">
 
                                         </md-input-container>
                                     </div>
@@ -161,11 +161,11 @@
 
                                         <div flex class="inputlabel" >
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">Gateway</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">Gateway</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.gateway" aria-label="Gateway">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.gateway" aria-label="Gateway">
 
                                         </md-input-container>
                                     </div>
@@ -173,11 +173,11 @@
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">Netmask</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">Netmask</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.netmask" aria-label="Netmask">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.netmask" aria-label="Netmask">
 
                                         </md-input-container>
                                     </div>
@@ -199,20 +199,20 @@
                                         <span class="card-subtitle" >MQTT</span>
                                     </div>
                                     <div flex></div>
-                                    <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                    <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="esprgbww.network.mqtt.enabled"></md-switch>
                                 </div>
-                                <div ng-hide="!rgbww.network.mqtt.enabled" class="ng-hide animate-hide">
+                                <div ng-hide="!esprgbww.network.mqtt.enabled" class="ng-hide animate-hide">
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Server</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Server</span>
 
                                         </div>
 
                                         <md-input-container class="cardinput">
 
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.server" aria-label="MQTT Server">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.server" aria-label="MQTT Server">
 
                                         </md-input-container>
 
@@ -220,32 +220,32 @@
                                     <div layout="row"  layout-align="center center">
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Port</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Port</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
 
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
 
                                         </md-input-container>
 
                                     </div>
                                     <div layout="row" layout-align="center center">
                                         <div flex class="inputlabel" >
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Username</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Username</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.username" aria-label="MQTT Username">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.username" aria-label="MQTT Username">
 
                                         </md-input-container>
 
                                     </div>
                                     <div layout="row" layout-align="center center">
                                         <div flex class="inputlabel" >
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Password</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Password</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.password" aria-label="MQTT Username">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Username">
 
                                         </md-input-container>
 

@@ -160,14 +160,19 @@ angular
             espcon.getInfo().then(function(data) {
                 //TODO error handling
                 $scope.ctrlinfo = data;
+                
+                espcon.getConfig().then(function(data){
+                    //TODO: check for error and show dialog
+                    data.network.connection.ip = $scope.ctrlinfo.connection.ip;
+                    data.network.connection.netmask = $scope.ctrlinfo.connection.netmask;
+                    data.network.connection.gateway = $scope.ctrlinfo.connection.gateway;
+                        $scope.esprgbww = data;
+                }, function(data){
+                    //TODO: error - show dialog
+                    $scope.esprgbww = {};
+                });
             });
-            espcon.getConfig().then(function(data){
-                //TODO: check for error and show dialog
-                $scope.rgbww = data;
-            }, function(data){
-                //TODO: error - show dialog
-                $scope.rgbww = {};
-            });
+
 
             espcon.getColor().then(function(data){
                 //TODO: check for error and show dialog
@@ -196,7 +201,7 @@ angular
         };
         $scope.saveConfig = function() {
             $scope.saving = true;
-            espcon.saveConfig($scope.rgbww, true).then(function(result){
+            espcon.saveConfig($scope.esprgbww, true).then(function(result){
                 //Success
                 if(result) {
                     console.log("success")
@@ -276,7 +281,9 @@ angular
                         } else {
                             $scope.processing = false;
                             if (result.ota_status == 3) {
-                                $scope.error = "OTA Failed - please try again"
+                                $scope.error = "OTA Failed - please restart the controller and try again"
+                            } else {
+                                espcon.systemcmd("restart");
                             }
                         }
 
@@ -351,15 +358,15 @@ angular
 
         $scope.exportSettings = function () {
 
-            if (typeof $scope.rgbww === 'object') {
+            if (typeof $scope.esprgbww === 'object') {
 
                 var data = {
                     network : {
-                        mqtt: $scope.rgbww.network.mqtt,
-                        udpserver: $scope.rgbww.network.udpserver,
-                        tcpserver: $scope.rgbww.network.tcpserver
+                        mqtt: $scope.esprgbww.network.mqtt,
+                        udpserver: $scope.esprgbww.network.udpserver,
+                        tcpserver: $scope.esprgbww.network.tcpserver
                     },
-                    color: $scope.rgbww.color
+                    color: $scope.esprgbww.color
                 };
                 data = JSON.stringify(data, undefined, 2);
             } else {
@@ -400,14 +407,14 @@ angular
                 password: ""
             }
             espcon.getConfig().then(function(data){
-                $scope.rgbww = data;
+                $scope.esprgbww = data;
             }, function(data){
                 if(error == false) {
                     $mdToast.showSimple('Network error - please reload');
                     error = true;
                 }
 
-                $scope.rgbww = {};
+                $scope.esprgbww = {};
 
             });
             espcon.getInfo().then(function(data) {
@@ -438,7 +445,7 @@ angular
 
 
         $scope.connect = function(ev) {
-            espcon.saveConfig($scope.rgbww, false);
+            espcon.saveConfig($scope.esprgbww, false);
             var wifi = {
                 ssid: $scope.wnetwork.ssid,
                 password: $scope.wlandata.password

@@ -143,7 +143,7 @@
                                         <div flex="10">
                                             <span>WW</span>
                                         </div>
-                                        <md-slider ng-mouseup="setColor()" ng-model="hsvcolor.whitebalance" min="{{ rgbww.color.colortemp.ww }}" max="{{ rgbww.color.colortemp.cw }}" class="centerslider" aria-label="White Color Temperature">
+                                        <md-slider ng-mouseup="setColor()" ng-model="hsvcolor.whitebalance" min="{{ esprgbww.color.colortemp.ww }}" max="{{ esprgbww.color.colortemp.cw }}" class="centerslider" aria-label="White Color Temperature">
                                         </md-slider>
                                         <div flex="10">
                                             <span>CW</span>
@@ -179,7 +179,7 @@
                                         </div>
                                         <md-input-container class="cardselect">
 
-                                            <md-select ng-model="rgbww.color.hsv.model">
+                                            <md-select ng-model="esprgbww.color.hsv.model">
                                                 <label show-xs>Calculation Model</label>
                                                 <md-option ng-value="model.id" ng-repeat="model in hsvmodes" value="{{model.id}}">
                                                     {{model.title}}
@@ -189,47 +189,47 @@
                                         </md-input-container>
                                         <div hide-gt-xs style="width:30px"></div>
                                     </div>
-                                    <div ng-hide="rgbww.color.hsv.model == 2">
+                                    <div ng-hide="esprgbww.color.hsv.model == 2">
                                     <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start" style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel" >
                                             <span>Red</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.hsv.red" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Red">
+                                        <md-slider ng-model="esprgbww.color.hsv.red" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Red">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Yellow</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.hsv.yellow" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Yellow">
+                                        <md-slider ng-model="esprgbww.color.hsv.yellow" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Yellow">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span >Green</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.hsv.green" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Green">
+                                        <md-slider ng-model="esprgbww.color.hsv.green" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Green">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Cyan</span>
                                         </div>
-                                        <md-slider  ng-model="rgbww.color.hsv.cyan" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Cyan">
+                                        <md-slider  ng-model="esprgbww.color.hsv.cyan" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Cyan">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Blue</span>
                                         </div>
-                                        <md-slider  ng-model="rgbww.color.hsv.blue" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Blue">
+                                        <md-slider  ng-model="esprgbww.color.hsv.blue" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Blue">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Magenta</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
+                                        <md-slider ng-model="esprgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
                                         </md-slider>
                                     </div>
                                     </div>
@@ -259,7 +259,7 @@
                                         </div>
                                         <md-input-container class="cardselect">
 
-                                            <md-select ng-model="rgbww.color.outputmode">
+                                            <md-select ng-model="esprgbww.color.outputmode">
                                                 <label show-xs>Output Model</label>
                                                 <md-option ng-value="model.id" ng-repeat="model in colormodes" value="{{model.id}}">
                                                     {{model.title}}
@@ -275,35 +275,35 @@
                                         <div flex="30" flex-xs="100" class="sliderlabel" >
                                             <span>Red</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.brightness.red" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Red">
+                                        <md-slider ng-model="esprgbww.color.brightness.red" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Red">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Green</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.brightness.green" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Green">
+                                        <md-slider ng-model="esprgbww.color.brightness.green" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Green">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Blue</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.brightness.blue" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Blue">
+                                        <md-slider ng-model="esprgbww.color.brightness.blue" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Blue">
                                         </md-slider>
                                     </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                    <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 2" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Warm White</span>
                                         </div>
-                                        <md-slider  ng-model="rgbww.color.brightness.ww" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Warm White">
+                                        <md-slider  ng-model="esprgbww.color.brightness.ww" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Warm White">
                                         </md-slider>
                                     </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                    <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 1" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Cold White</span>
                                         </div>
-                                        <md-slider ng-model="rgbww.color.brightness.cw" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Cold White">
+                                        <md-slider ng-model="esprgbww.color.brightness.cw" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Cold White">
                                         </md-slider>
                                     </div>
 
@@ -331,14 +331,14 @@
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Warm White</span>
                                         </div>
-                                        <md-slider disabled ng-model="rgbww.color.colortemp.ww" min="2000" max="5000" md-discrete class="centerslider" aria-label="WarmWhite colortemp">
+                                        <md-slider disabled ng-model="esprgbww.color.colortemp.ww" min="2000" max="5000" md-discrete class="centerslider" aria-label="WarmWhite colortemp">
                                         </md-slider>
                                     </div>
                                     <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"   style="padding-top: 15px;">
                                         <div flex="30" flex-xs="100" class="sliderlabel">
                                             <span>Cold White</span>
                                         </div>
-                                        <md-slider disabled ng-model="rgbww.color.colortemp.cw" min="4000" max="8000" md-discrete class="centerslider" aria-label="ColdWhite colortemp">
+                                        <md-slider disabled ng-model="esprgbww.color.colortemp.cw" min="4000" max="8000" md-discrete class="centerslider" aria-label="ColdWhite colortemp">
                                         </md-slider>
                                     </div>
                                 </md-card-content>
@@ -364,6 +364,10 @@
                                         <span >{{ ctrlinfo.connection.ssid }}</span>
                                     </div>
                                     <div layout="row" layout-align="start center" >
+                                        <span  flex="40" layout-padding >IP</span>
+                                        <span >{{ ctrlinfo.connection.ip }}</span>
+                                    </div>
+                                    <div layout="row" layout-align="start center" >
                                         <span  flex="40" layout-padding >MAC</span>
                                         <span >{{ ctrlinfo.connection.mac }}</span>
                                     </div>
@@ -387,20 +391,21 @@
                                         </div>
                                         <md-input-container class="cardinput">
 
-                                            <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.network.connection.dhcp"></md-switch>
+                                            <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="esprgbww.network.connection.dhcp"></md-switch>
 
                                         </md-input-container>
 
                                     </div>
+                                    <div ng-show="esprgbww.network.connection.dhcp == false" class="ng-hide">
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">IP Address</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">IP Address</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.ip" aria-label="Controller IP">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.ip" aria-label="Controller IP">
 
                                         </md-input-container>
                                     </div>
@@ -408,11 +413,11 @@
 
                                         <div flex class="inputlabel" >
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">Gateway</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">Gateway</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.gateway" aria-label="Gateway">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.gateway" aria-label="Gateway">
 
                                         </md-input-container>
                                     </div>
@@ -420,13 +425,14 @@
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="rgbww.network.connection.dhcp">Netmask</span>
+                                            <span ng-disabled="esprgbww.network.connection.dhcp">Netmask</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="rgbww.network.connection.dhcp" ng-model="rgbww.network.connection.netmask" aria-label="Netmask">
+                                            <input type="text" ng-pattern='/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/' ng-model-options="{ updateOn: 'blur' }" ng-disabled="esprgbww.network.connection.dhcp" ng-model="esprgbww.network.connection.netmask" aria-label="Netmask">
 
                                         </md-input-container>
+                                    </div>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -451,19 +457,20 @@
                                             <span class="card-subtitle" >MQTT</span>
                                         </div>
                                         <div flex></div>
-                                        <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="rgbww.network.mqtt.enabled"></md-switch>
+                                        <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="esprgbww.network.mqtt.enabled"></md-switch>
                                     </div>
+                                    <div ng-show="esprgbww.network.mqtt.enabled" class="ng-hide">
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Server</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Server</span>
 
                                         </div>
 
                                         <md-input-container class="cardinput">
 
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.server" aria-label="MQTT Server">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.server" aria-label="MQTT Server">
 
                                         </md-input-container>
 
@@ -471,35 +478,36 @@
                                     <div layout="row"  layout-align="center center">
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Port</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Port</span>
 
                                         </div>
                                         <md-input-container class="cardinput">
 
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
 
                                         </md-input-container>
 
                                     </div>
                                     <div layout="row" layout-align="center center">
                                         <div flex class="inputlabel" >
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Username</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Username</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.username" aria-label="MQTT Username">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.username" aria-label="MQTT Username">
 
                                         </md-input-container>
 
                                     </div>
                                     <div layout="row" layout-align="center center">
                                         <div flex class="inputlabel" >
-                                            <span ng-disabled="!rgbww.network.mqtt.enabled">Password</span>
+                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Password</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!rgbww.network.mqtt.enabled" ng-model="rgbww.network.mqtt.password" aria-label="MQTT Username">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Username">
 
                                         </md-input-container>
 
+                                    </div>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -529,7 +537,7 @@
 
                                         <md-input-container class="cardinput">
 
-                                            <input type="text" ng-model="rgbww.network.ap.ssid" aria-label="Accesspoint Name">
+                                            <input type="text" ng-model="esprgbww.network.ap.ssid" aria-label="Accesspoint Name">
 
                                         </md-input-container>
 
@@ -539,20 +547,20 @@
                                             <span class="card-subtitle" >Secure AP</span>
                                         </div>
                                         <div flex></div>
-                                        <md-switch class="md-primary" md-no-ink aria-label="Secure Accesspoint" ng-model="rgbww.network.ap.secured"></md-switch>
+                                        <md-switch class="md-primary" md-no-ink aria-label="Secure Accesspoint" ng-model="esprgbww.network.ap.secured"></md-switch>
                                     </div>
 
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.network.ap.secured">Password</span>
+                                            <span ng-disabled="!esprgbww.network.ap.secured">Password</span>
 
                                         </div>
 
                                         <md-input-container class="cardinput">
 
-                                            <input minlength="8" maxlength="20" type="password" ng-disabled="!rgbww.network.ap.secured" ng-model="rgbww.network.ap.password" aria-label="Accesspoint Password">
+                                            <input minlength="8" maxlength="20" type="password" ng-disabled="!esprgbww.network.ap.secured" ng-model="esprgbww.network.ap.password" aria-label="Accesspoint Password">
 
                                         </md-input-container>
 
@@ -617,21 +625,21 @@
                                             <span>Secure Settings Access </span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <md-switch class="md-primary" md-no-ink aria-label="Manual Configuration" ng-model="rgbww.security.settings_secured"></md-switch>
+                                            <md-switch class="md-primary" md-no-ink aria-label="Manual Configuration" ng-model="esprgbww.security.settings_secured"></md-switch>
                                         </md-input-container>
                                     </div>
                                     <div layout="row"  layout-align="center center">
 
                                         <div flex class="inputlabel">
 
-                                            <span ng-disabled="!rgbww.security.settings_secured">Password</span>
+                                            <span ng-disabled="!esprgbww.security.settings_secured">Password</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="password" ng-disabled="!rgbww.security.settings_secured" ng-model="rgbww.security.settings_password" aria-label="Password">
+                                            <input type="password" ng-disabled="!esprgbww.security.settings_secured" ng-model="esprgbww.security.settings_password" aria-label="Password">
                                         </md-input-container>
                                     </div>
                                     <div layout="row"   layout-align="start center">
-                                        <md-button ng-disabled="!rgbww.security.settings_secured" class="md-raised" aria-label="Save Password" ng-click="saveConfig()" md-no-ink> Change </md-button>
+                                        <md-button ng-disabled="!esprgbww.security.settings_secured" class="md-raised" aria-label="Save Password" ng-click="saveConfig()" md-no-ink> Change </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -772,12 +780,12 @@
                 </div>
                 <div class="ng-hide" ng-show="step == 1">
                     <div ng-show="error != false && processing == false" class="ng-hide full-width">
-                        <span class="card-subtitle" >Error</span>
+                        <span class="card-subtitle" >OTA failed</span>
                         <p>
                             <br>{{ error }}<br>
                         </p>
                     </div>
-                    <div ng-show="error == false" class="ng-hide full-width">
+                    <div ng-show="processing == true" class="ng-hide full-width">
                         <span class="card-subtitle" >OTA</span>
                         <br><br>
 
@@ -791,14 +799,19 @@
                             <span flex="60" class="md-caption">{{ updateprogress.webapp }}</span>
                         </div>
                         <br>
-                        <div class="ng-hide" ng-show="processing == false && step == 1">
-                            Controller will restart automatically
+                    </div>
+                    <div ng-show="error == false && processing == false" >
+                        <span class="card-subtitle" >OTA successfull</span>
+                        <br><br>
+                        <div>
+                            Controller will restart automatically<br><br>
+                            Please reload the interface
                         </div>
                     </div>
                 </div>
             </div>
         </md-dialog-content>
-        <md-dialog-actions ng-show="processing == false && step == 1" class="ng-hide">
+        <md-dialog-actions ng-show="processing == false && step == 1 && error == true" class="ng-hide">
             <md-button  ng-click="cancel()" class="md-primary" >OK</md-button>
         </md-dialog-actions>
         <md-dialog-actions ng-show="error == false && processing == false && step == 0" class="ng-hide">
