@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         'string-replace': {
             dist: {
                 files: [
-                    {expand: true, cwd: 'src/', src: 'main.js', dest: 'build/'},
+                    {expand: true, cwd: 'build/', src: 'main-minsafe.js', dest: 'build/'},
                     {expand: true, cwd: 'src/', src: 'init.html', dest: 'build/'},
                     {expand: true, cwd: 'src/', src: 'index.html', dest: 'build/'}
                 ],
@@ -24,7 +24,20 @@ module.exports = function(grunt) {
             },
             app: {
                 files: {
-                    'build/main-minsafe.js': ['build/main.js']
+                    'build/main-minsafe.js': [
+                        'src/js/app.js',
+                        'src/js/app.common.js',
+                        'src/js/controller.init.js',
+                        'src/js/controller.main.js',
+                        'src/js/controller.okcancelctrl.js',
+                        'src/js/controller.otactrl.js',
+                        'src/js/controller.connectionctrl.js',
+                        'src/js/controller.toastctrl.js',
+                        'src/js/directive.svgicon.js',
+                        'src/js/directive.wificon.js',
+                        'src/js/factory.espcon.js',
+                        'src/js/factory.interceptor.js',
+                    ]
                 }
             }
         },
@@ -55,8 +68,8 @@ module.exports = function(grunt) {
                         'bower_components/angular-animate/angular-animate.js',
                         'bower_components/angular-aria/angular-aria.js',
                         'bower_components/angular-material/angular-material.js',
-                        'src/tinycolor.js',
-                        'src/mdColorPicker.js',
+                        'src/js/tinycolor.js',
+                        'src/js/mdColorPicker.js',
                         'build/main-minsafe.js']
                 }
             }
@@ -89,6 +102,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('cleanup', 'cleanup tmp files', function() {
 		grunt.file.delete('build', [{force:true}]);
 	});
-    grunt.registerTask('default', ['string-replace', 'ngAnnotate', 'concat', 'uglify', 'cssmin', 'compress']);
+    grunt.registerTask('default', ['ngAnnotate', 'string-replace', 'concat', 'uglify', 'cssmin', 'compress']);
 	grunt.registerTask('release', ['default', 'version']);
 };

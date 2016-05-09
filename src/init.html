@@ -88,13 +88,13 @@
                             <md-card-content>
                                 <div layout="row" layout-align="end center">
                                     <div style="margin-top:10px;">
-                                        <md-button class="md-icon-button" ng-click="refreshnetwork(true)" aria-label="Refresh" ng-hide="netloading">
+                                        <md-button ng-disabled="isOnline == false" class="md-icon-button" ng-click="refreshnetwork(true)" aria-label="Refresh" ng-hide="netloading">
                                             <md-icon ><svg-icon name="refresh"></svg-icon></md-icon>
 
                                         </md-button>
 
                                     </div>
-                                    <md-progress-circular ng-hide="!netloading" md-mode="indeterminate"></md-progress-circular>
+                                    <md-progress-circular ng-hide="netloading == false" md-mode="indeterminate"></md-progress-circular>
                                     <md-input-container class="cardselect cardinput">
 
                                         <md-select ng-disabled="netloading || wifidata.scanning != false" ng-model="wnetwork" id="wifiselect" >
@@ -245,7 +245,7 @@
                                             <span ng-disabled="!esprgbww.network.mqtt.enabled">Password</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Username">
+                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Password">
 
                                         </md-input-container>
 
@@ -274,8 +274,8 @@
             <div layout="row" layout-align="center center" style="min-height:200px;" ng-hide="processing == false">
                 <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
             </div>
-            <div ng-hide="processing == true" layout="row" layout-align="start center">
-                <div ng-show="connection.status == 2 && networkerror == false" class="ng-hide">
+            <div ng-hide="processing == true" layout="row" layout-align="start center" style="min-height:200px;">
+                <div ng-show="connection.status == 2 && error == false" class="ng-hide">
                     <span class="card-subtitle" >Connection successful</span>
                     <div layout="row" layout-align="start center" style="padding-top: 25px">
                         <span flex="40" layout-padding>SSID :</span>
@@ -289,18 +289,17 @@
                     <span>Controller will restart now.</span>
 
                 </div>
-                <div ng-show="connection.status != 2 && networkerror == false" class="ng-hide">
+                <div ng-show="connection.status != 2 && error == false" class="ng-hide">
                     <span class="card-subtitle" >Connection failed</span>
                     <p style="padding-top: 20px">
                         <span>Could not connect to "{{ condata.ssid }}"</span><br><br>
                         <span>Error: {{ connection.error }}</span>
                     </p>
                 </div>
-                <div ng-show="networkerror == true" class="ng-hide">
+                <div ng-show="error != false " class="ng-hide">
                     <span class="card-subtitle" >Connection failed</span>
                     <p>
-                        There was an error with the network connection.<br>
-                        Please check your connection and try again
+                        {{ error }}
                     </p>
                 </div>
             </div>
@@ -313,4 +312,9 @@
 </script>
 <script src="app.min.js?rel={{ VERSION }}" type="text/javascript" ></script>
 
+<script type="text/ng-template" id="ConnectionToast.html">
+    <md-toast>
+        <span class="md-toast-text" flex>{{ text }}</span>
+    </md-toast>
+</script>
 </html>

@@ -1,13 +1,18 @@
-/*
-md-color-picker 0.1.0
-https://github.com/brianpkelley/md-color-picker
-Brian Kelley
-GNU GENERAL PUBLIC LICENSE
-*/
+/**
+ * @file
+ * @author  Patrick Jahns http://github.com/patrickjahns
+ *
+ * This file is provided under the LGPL v3 license.
+ *
+ * @section Description
+ *
+ *  Modified ColorPicker based on the work of Brian Kelley (https://github.com/brianpkelley/md-color-picker)
+ */
 
-'use strict';
+(function() {
 
-angular.module('mdColorPicker', [])
+angular
+    .module('mdColorPicker', [])
     .directive( 'mdColorPickerHue', ['$rootScope', function($rootScope) {
         return {
             template: '<canvas width="100%" height="100%"></canvas><div class="md-color-picker-marker"></div>',
@@ -388,3 +393,5 @@ angular.module('mdColorPicker', [])
             }
         };
 	}]);
+    
+})();
