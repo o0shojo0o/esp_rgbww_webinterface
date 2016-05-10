@@ -382,7 +382,7 @@
                                         <span >{{ ctrlinfo.connection.mac }}</span>
                                     </div>
                                     <div layout="row" layout-align="end center">
-                                        <md-button ng-disabled="conStatus.online == false" ng-click="showConfirm($event, 'Forget wifi', 'forget_wifi', 'Wifi information (SSID, Password) will be deleted and controller will restart in access point mode', 'Controller will restart now. For configuration please connect to {{ esprgbww.network.ap.ssid }} wifi')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
+                                        <md-button ng-disabled="conStatus.online == false" ng-click="showConfirm($event, 'Forget wifi', 'forget_wifi', 'Wifi information (SSID, Password) will be deleted and controller will restart in access point mode', 'Controller will restart now. For configuration please reconnect to controller wlan')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
                                     </div>
                                     <div style="margin-top:15px;" layout="row"  layout-align="center center">
                                         <div>
@@ -615,7 +615,7 @@
                                     <div layout="row"   layout-align="end center">
                                         <md-button ng-disabled='conStatus.online == false' ng-click="showConfirm($event, 'Restart','restart', 'Press ok to restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
 
-                                        <md-button ng-disabled='conStatus.online == false' ng-click="showConfirm($event, 'Reset controller', 'reset', 'This will reset all settings and restart the controller in access point mode', 'Setting resetted - controller will restart now. For configuration please connect to {{ esprgbww.network.ap.ssid }} wifi')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
+                                        <md-button ng-disabled='conStatus.online == false' ng-click="showConfirm($event, 'Reset controller', 'reset', 'This will reset all settings and restart the controller in access point mode', 'Setting resetted - controller will restart now. For configuration please connect to controller wlan')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
