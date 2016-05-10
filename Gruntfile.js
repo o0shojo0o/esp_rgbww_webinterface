@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                         'src/js/directive.svgicon.js',
                         'src/js/directive.wificon.js',
                         'src/js/factory.espcon.js',
-                        'src/js/factory.interceptor.js',
+                        'src/js/factory.offlineinterceptor.js'
                     ]
                 }
             }

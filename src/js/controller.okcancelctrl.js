@@ -17,7 +17,7 @@ function OkCancelCtrl($scope, $mdDialog, espConnectionFactory, info) {
     var close = typeof info.msg_success !== 'undefined' ? false : true;
 
     $scope.ok = function() {
-        espConnectionFactory.systemcmd(info.cmd);
+        espConnectionFactory.systemCMD(info.cmd);
         if(close == true) {
             $mdDialog.hide();
         }

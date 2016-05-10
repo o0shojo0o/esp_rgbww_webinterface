@@ -42,21 +42,24 @@ function espConnectionFactory($http, $timeout) {
         var newsettings = JSON.parse(JSON.stringify(settings));
 
         r = typeof r !== 'undefined' ? r : false;
-        if (safeObjectPath(newsettings, "api_password") && safeObjectPath(newsettings, "api_secured")) {
-            if(typeof newsettings.security.api_password == 'undefined' ||
-                newsettings.security.api_password == "" ||
-                newsettings.security.api_secured != 1) {
-
+        if (safeObjectPath(newsettings, "api_secured")) {
+            if(!safeObjectPath(newsettings, "api_password")) {
                 delete newsettings.security.api_secured;
-                delete newsettings.security.api_password;
+            } else {
+                if(typeof newsettings.security.api_password == 'undefined' || newsettings.security.api_password == "" || newsettings.security.api_secured != 1) {
+                    delete newsettings.security.api_secured;
+                    delete newsettings.security.api_password;
+                }
             }
         }
-        if (safeObjectPath(newsettings, "secured") && safeObjectPath(newsettings, "password")) {
-            if (typeof newsettings.network.ap.password == 'undefined' ||
-                newsettings.network.ap.password == "" ||
-                newsettings.network.ap.secured != 1) {
-
-                delete newsettings.network.ap.password;
+        if (safeObjectPath(newsettings, "secured")) {
+            if(!safeObjectPath(newsettings, "password")) {
+                delete newsettings.network.ap.secured;
+            } else {
+                if (typeof newsettings.network.ap.password == 'undefined' || newsettings.network.ap.password == "" || newsettings.network.ap.secured != 1) {
+                    delete newsettings.network.ap.secured;
+                    delete newsettings.network.ap.password;
+                }
             }
         }
         newsettings.restart = r;
@@ -197,7 +200,7 @@ function espConnectionFactory($http, $timeout) {
     }
 
     function isConnected() {
-        $http.get('/ping').then(function(result){
+        return $http.get('/ping', {timeout: 5000}).then(function(result){
             return safeObjectPath(result.data, "ping");
         }, function(data) {
             return false;

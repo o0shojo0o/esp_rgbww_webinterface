@@ -12,9 +12,9 @@ angular
     .module('rgbwwApp')
     .controller('mainCtrl', mainCtrl);
 
-function mainCtrl($scope, $mdSidenav, $timeout, $mdDialog, $mdToast, $http, $window, $rootScope, espConnectionFactory) {
+function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, espConnectionFactory) {
 
-    $scope.isOnline = $rootScope.online;
+    $scope.isOnline = checkOnline;
     $scope.saving = false;
     $scope.webappversion = version;
     $scope.color = new tinycolor("rgb (0, 0, 0)");
@@ -25,7 +25,7 @@ function mainCtrl($scope, $mdSidenav, $timeout, $mdDialog, $mdToast, $http, $win
 
     function init() {
 
-        if(!$scope.isOnline) return;
+        if(!$scope.isOnline()) return;
         fetchInfo();
         fetchColor();
     }
@@ -65,15 +65,6 @@ function mainCtrl($scope, $mdSidenav, $timeout, $mdDialog, $mdToast, $http, $win
         });
     }
 
-    $rootScope.$watch('online', function(newValue, oldValue) {
-        $scope.isOnline = newValue;
-        if (newValue !== oldValue) {
-            if(newValue) {
-                init();
-            }
-        }
-    });
-
     $scope.openMenu = function() {
         $mdSidenav('menu').toggle();
 
@@ -91,17 +82,15 @@ function mainCtrl($scope, $mdSidenav, $timeout, $mdDialog, $mdToast, $http, $win
     $scope.saveConfig = function() {
         $scope.saving = true;
         espConnectionFactory.saveConfig($scope.esprgbww, true).then(function(result){
-            //Success
             if(result == false) {
-            //TODO: better description
-             $mdToast.showSimple("something went wrong while saving");
+             $mdToast.showSimple("something went wrong while saving the configuration");
             }
             $scope.saving = false;
         });
     };
 
     $scope.initUpdate = function(ev) {
-        var url = $scope.update.url;
+        var url = $scope.esprgbww.ota.url;
         var fwversion = $scope.ctrlinfo.firmware;
         var webappversion = $scope.webappversion;
         $mdDialog.show({
@@ -171,6 +160,13 @@ function mainCtrl($scope, $mdSidenav, $timeout, $mdDialog, $mdToast, $http, $win
         $scope.setColor();
     });
 
+    function checkOnline() {
+        return $rootScope.isOnline;
+    }
+
+    $scope.$on('online', function(e) {
+        init();
+    });
 
 }
 })();

@@ -382,7 +382,7 @@
                                         <span >{{ ctrlinfo.connection.mac }}</span>
                                     </div>
                                     <div layout="row" layout-align="end center">
-                                        <md-button ng-disabled="isOnline == false" ng-click="showConfirm($event, 'Forget wifi', 'forget_wifi', 'Wifi information (SSID, Password) will be deleted and controller will restart in access point mode', 'Controller will restart now<br>For configuration please connect to controller accesspoint')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
+                                        <md-button ng-disabled="conStatus.online == false" ng-click="showConfirm($event, 'Forget wifi', 'forget_wifi', 'Wifi information (SSID, Password) will be deleted and controller will restart in access point mode', 'Controller will restart now. For configuration please connect to {{ esprgbww.network.ap.ssid }} wifi')" class="md-raised" aria-label="Restart" md-no-ink> Forget </md-button>
                                     </div>
                                     <div style="margin-top:15px;" layout="row"  layout-align="center center">
                                         <div>
@@ -560,7 +560,7 @@
                                         <md-switch class="md-primary" md-no-ink aria-label="Secure Accesspoint" ng-model="esprgbww.network.ap.secured"></md-switch>
                                     </div>
 
-                                    <div layout="row"  layout-align="center center">
+                                    <div layout="row"  layout-align="center center"  class="ng-hide" ng-show="esprgbww.network.ap.secured == true">
 
                                         <div flex class="inputlabel">
 
@@ -570,12 +570,15 @@
 
                                         <md-input-container class="cardinput">
 
-                                            <input minlength="8" maxlength="20" type="password" ng-disabled="!esprgbww.network.ap.secured" ng-model="esprgbww.network.ap.password" aria-label="Accesspoint Password">
+                                            <input minlength="8" maxlength="20" type="password" ng-disabled="esprgbww.network.ap.secured != true" ng-model="esprgbww.network.ap.password" aria-label="Accesspoint Password">
 
                                         </md-input-container>
 
-                                    </div>
 
+                                    </div>
+                                    <div layout="row"  layout-align="start start"  class="ng-hide" ng-show="esprgbww.network.ap.secured == true">
+                                        <span class="md-caption"> Note: If already saved, the password will not be displayed again </span>
+                                    </div>
                                 </md-card-content>
                             </md-card>
                         </div>
@@ -610,9 +613,9 @@
                                         <span class="card-subtitle" >System </span>
                                     </div>
                                     <div layout="row"   layout-align="end center">
-                                        <md-button ng-disabled='isOnline == false' ng-click="showConfirm($event, 'Restart','restart', 'Press ok to restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
+                                        <md-button ng-disabled='conStatus.online == false' ng-click="showConfirm($event, 'Restart','restart', 'Press ok to restart the controller')" class="md-raised" aria-label="Restart" md-no-ink> Restart </md-button>
 
-                                        <md-button ng-disabled='isOnline == false' ng-click="showConfirm($event, 'Reset controller', 'reset', 'This will reset all settings and restart the controller in access point mode', 'Setting resetted - controller will restart now. For configuration please connect to controller accesspoint')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
+                                        <md-button ng-disabled='conStatus.online == false' ng-click="showConfirm($event, 'Reset controller', 'reset', 'This will reset all settings and restart the controller in access point mode', 'Setting resetted - controller will restart now. For configuration please connect to {{ esprgbww.network.ap.ssid }} wifi')" class="md-raised" aria-label="Reset" md-no-ink> Reset </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -638,18 +641,24 @@
                                             <md-switch class="md-primary" md-no-ink aria-label="Manual Configuration" ng-model="esprgbww.security.api_secured"></md-switch>
                                         </md-input-container>
                                     </div>
-                                    <div layout="row"  layout-align="center center">
+
+                                    <div layout="row"  layout-align="center center" class="ng-hide" ng-show="esprgbww.security.api_secured == true">
 
                                         <div flex class="inputlabel">
 
                                             <span ng-disabled="!esprgbww.security.api_secured">Password</span>
                                         </div>
                                         <md-input-container class="cardinput">
-                                            <input type="password" ng-disabled="!esprgbww.security.api_secured" ng-model="esprgbww.security.api_password" aria-label="Password">
+                                            <input type="password" ng-disabled="esprgbww.security.api_secured != true" ng-model="esprgbww.security.api_password" aria-label="Password">
+
                                         </md-input-container>
+
                                     </div>
-                                    <div layout="row" layout-align="start center">
-                                        <md-button ng-disabled="isOnline == false" class="md-raised" aria-label="Save Password" ng-click="saveConfig()" md-no-ink> Change </md-button>
+                                    <div layout="row"  layout-align="start start" class="ng-hide" ng-show="esprgbww.security.api_secured == true">
+                                        <span class="md-caption"> Note: If already saved, the password will not be displayed again </span>
+                                    </div>
+                                    <div layout="row" layout-align="start center" style="padding-top:10px;">
+                                        <md-button ng-disabled="isOnline() == false" class="md-raised" aria-label="Save Password" ng-click="saveConfig()" md-no-ink> Change </md-button>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -695,10 +704,10 @@
 
                                         <md-input-container style="width:100%; margin-bottom: 0px!important;">
                                             <label>OTA URL</label>
-                                            <input type="text"  ng-model="esprgbww.ota_url" aria-label="UTA URL" >
+                                            <input type="text"  ng-model="esprgbww.ota.url" aria-label="UTA URL" >
 
                                         </md-input-container>
-                                        <md-button  class="md-raised" aria-label="Update" md-no-ink ng-click="initUpdate($event)" ng-disabled="esprgbww.ota_url == '' || isOnline == false">Check</md-button>
+                                        <md-button  class="md-raised" aria-label="Update" md-no-ink ng-click="initUpdate($event)" ng-disabled="esprgbww.ota.url == '' || isOnline() == false">Check</md-button>
                                     </div>
 
                                 </md-card-content>
@@ -713,7 +722,7 @@
 
     </div>
     <div >
-        <md-button ng-hide="tabs.selectedIndex == 0" hide-gt-xs class="md-fab md-warn md-fab-bottom-right" ng-disabled="isOnline == false || saving == true" ng-click="saveConfig()" style="bottom: 8px; right:8px;"  aria-label="Save Settings">
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-gt-xs class="md-fab md-warn md-fab-bottom-right" ng-disabled="isOnline() == false || saving == true" ng-click="saveConfig()" style="bottom: 8px; right:8px;"  aria-label="Save Settings">
             <div ng-hide="saving == true">
                 <md-icon><svg-icon name="done"></svg-icon></md-icon>
             </div>
@@ -721,7 +730,7 @@
                 <md-progress-circular md-mode="indeterminate" class="savespinner"></md-progress-circular>
             </div>
         </md-button>
-        <md-button ng-hide="tabs.selectedIndex == 0" hide-xs class="md-fab md-warn md-fab-bottom-right"  ng-disabled="isOnline == false || saving == true" ng-click="saveConfig()"  aria-label="Save Settings">
+        <md-button ng-hide="tabs.selectedIndex == 0" hide-xs class="md-fab md-warn md-fab-bottom-right"  ng-disabled="isOnline() == false || saving == true" ng-click="saveConfig()"  aria-label="Save Settings">
             <div ng-hide="saving == true">
                 <md-icon><svg-icon name="done"></svg-icon></md-icon>
             </div>
@@ -757,18 +766,19 @@
     <md-dialog aria-label="Ota Dialog" style="min-width:300px">
         <md-dialog-content >
             <div class="md-dialog-content" >
-                <div ng-show="ota_error != false && processing == false" class="ng-hide full-width" layout-align="start start">
+                <div ng-show="ota_error != false && processing == false" class="ng-hide full-width" layout-align="start start" style="min-height:100px;">
                     <span class="card-subtitle" >OTA failed</span>
-                    <div class="full-width" layout-align="start center" style="padding-top: 20px">
+                    <div class="full-width" layout-align="start center" style="padding-top: 10px">
                         {{ ota_error }}
                     </div>
+                </div>
                 <div class="ng-hide" ng-show="step == 0 && ota_error == false" >
-                    <div layout="row" layout-align="center center" style="min-height:200px;" ng-show="processing == true " class="ng-hide">
+                    <div layout="row" layout-align="center center" style="min-height:100px;" ng-show="processing == true " class="ng-hide">
                         <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
                     </div>
-                    <div ng-show="processing == false" layout="row" style="min-height:200px;" layout-align="start start" class="ng-hide">
+                    <div ng-show="processing == false" layout="column" style="min-height:100px;" layout-align="start start" class="ng-hide">
                         <span class="card-subtitle" >OTA Information</span>
-                        <div class="full-width" layout-align="start center" style="padding-top: 20px">
+                        <div class="full-width" layout-align="start center" style="padding-top: 10px">
 
                             <br><br>
                             <div layout="row" layout-align="start center">
@@ -793,24 +803,27 @@
                 <div class="ng-hide" ng-show="step == 1 && ota_error == false">
                     <div ng-show="processing == true" class="ng-hide full-width">
                         <span class="card-subtitle" >OTA - updating</span>
-                        <div layout="row" layout-align="center center" style="min-height:200px;" ng-show="processing == true " class="ng-hide">
+                        <div layout="row" layout-align="center center" style="min-height:100px;" ng-show="processing == true " class="ng-hide">
                             <md-progress-circular md-mode="indeterminate" ></md-progress-circular>
                         </div>
                     </div>
                 </div>
                 <div class="ng-hide" ng-show="step == 2 && ota_error == false">
-                    <div ng-show="processing == true" style="min-height:200px;" class="ng-hide full-width" layout-align="start start">
+                    <div ng-show="processing == true" style="min-height:100px;" class="ng-hide full-width" layout-align="start start">
                         <span class="card-subtitle" >OTA - rebooting</span>
-                        <div class="full-width" layout-align="start center" style="padding-top: 20px">
-
+                        <div class="full-width" layout-align="start center" style="padding-top: 10px">
+                            <br>
                             Successfully downloaded OTA
                             <br>
-                            Controller will reboot now - please wait
+                            Controller will restart with new firmware now.
+                            <br><br>
                         </div>
                     </div>
-                    <div ng-show="processing == false && ota_error == false" style="min-height:200px;" class="ng-hide full-width" layout-align="start start">
+                    <div ng-show="processing == false && ota_error == false" style="min-height:100px;" class="ng-hide full-width" layout-align="start start">
                         <span class="card-subtitle" >OTA - success</span>
-                        <div class="full-width" layout-align="start center" style="padding-top: 20px">
+                        <div class="full-width" layout-align="start center" style="padding-top: 10px">
+                            <br>
+                            Successfully started new firmware.
                             <br>
                             Web interface will reload in {{ reloadCounter }} s (<a href="#" ng-click="reloadWebIF()">reload now</a>)
                             <br>
@@ -833,7 +846,14 @@
 
 <script type="text/ng-template" id="ConnectionToast.html">
 <md-toast>
-    <span class="md-toast-text" flex>{{ text }}</span>
+    <div layout="row" layout-align="center center" flex>
+        <div  class="ng-hide" ng-show="connected == false">
+            <md-icon><svg-Icon name="report_problem"></svg-Icon></md-icon> <span class="md-toast-text" style="padding-left:4px"> not connected</span>
+        </div>
+        <div class="ng-hide" ng-show="connected == true">
+            <md-icon><svg-Icon name="info_white"></svg-Icon></md-icon> <span class="md-toast-text" style="padding-left:4px"> connected</span>
+        </div>
+    </div>
 </md-toast>
 </script>
 

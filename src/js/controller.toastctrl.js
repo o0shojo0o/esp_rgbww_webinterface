@@ -12,8 +12,8 @@
         .module('rgbwwApp')
         .controller('ToastCtrl', ToastCtrl);
 
-function ToastCtrl($scope, msg) {
-    $scope.text = msg;
+function ToastCtrl($scope, $mdToast, connected) {
+    $scope.connected = connected
 }
 
 })();

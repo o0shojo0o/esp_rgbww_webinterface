@@ -10,34 +10,36 @@
 angular
     .module('rgbwwApp', ['ngMaterial','ngAnimate', 'mdColorPicker'])
     .config(function($mdThemingProvider, $httpProvider) {
-        $httpProvider.interceptors.push('InterceptorFactory');
+        $httpProvider.interceptors.push('OfflineCheckInterceptor');
         $mdThemingProvider.theme('default').primaryPalette('blue').accentPalette('deep-purple');
         }
-    ).run(function($rootScope, $interval, $mdToast, espConnectionFactory) {
+    ).run(function($rootScope, $timeout, $mdToast, espConnectionFactory) {
+    
+    checkConnection();
 
-    $rootScope.online = true;
-    espConnectionFactory.isConnected();
-    function showCustomToast(message, delay) {
+    function checkConnection() {
+        espConnectionFactory.isConnected().then(function(connected){
+            $timeout(checkConnection, 4000);
+        });
+    }
+
+    $rootScope.$on('online', function(e) {
+        showConnectionToast(true, 2000);
+    });
+
+    $rootScope.$on('offline', function(e) {
+        showConnectionToast(false, 0);
+    });
+
+    function showConnectionToast(connected, delay) {
         $mdToast.show({
             hideDelay   : delay,
             position    : 'bottom',
-            locals: { text: message },
+            locals: { connected: connected },
             controller: 'ToastCtrl',
             templateUrl : 'ConnectionToast.html'
         });
-    };
+    }
 
-    $interval(function(){espConnectionFactory.isConnected();},5000);
-    $rootScope.$watch('online', function(newValue, oldValue){
-        if (newValue !== oldValue) {
-            if(newValue == false) {
-                showCustomToast('not connected', 0);
-            }
-            else
-            {
-                showCustomToast('connected', 3000);
-            }
-        }
-    });
 });
 })();

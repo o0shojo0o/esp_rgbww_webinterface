@@ -13,7 +13,7 @@
         .controller('OTACtrl', OTACtrl);
 
 
-function OTACtrl($scope, $mdDialog, $http, espConnectionFactory, url, fwversion, webappversion) {
+function OTACtrl($scope, $mdDialog, $http, $timeout, $window, espConnectionFactory, url, fwversion, webappversion) {
     $scope.step = 0;
     $scope.processing = true;
     $scope.ota_error = false;
@@ -27,10 +27,10 @@ function OTACtrl($scope, $mdDialog, $http, espConnectionFactory, url, fwversion,
     function initOTACtrl() {
         // 0 = checking url
         // 1 = processing update
-
-
+        $scope.processing = true;
         $http.get(url).then(function(result) {
             //check for valid
+            $scope.processing = false;
             var data = result.data;
             if (!safeObjectPath(data, "rom.fw_version") || !safeObjectPath(data, "rom.url") ||
                 !safeObjectPath(data, "spiffs.webapp_version") || !safeObjectPath(data, "spiffs.url")) {
@@ -40,14 +40,14 @@ function OTACtrl($scope, $mdDialog, $http, espConnectionFactory, url, fwversion,
             {
                 $scope.updateinfo = data;
             }
-            $scope.processing = false;
+
 
         }, function(result) {
             $scope.processing = false;
             if(result.status != -1) {
-                $scope.error = result.status + " " + result.statusText;
+                $scope.ota_error = result.status + " " + result.statusText;
             } else {
-                $scope.error = "Network error - please check your connection"
+                $scope.ota_error = "Network error - please check your connection"
             }
 
         });
@@ -123,7 +123,7 @@ function OTACtrl($scope, $mdDialog, $http, espConnectionFactory, url, fwversion,
 
         espConnectionFactory.initUpdate($scope.updateinfo).then(function(result){
             if(result == false) {
-                $scope.ota_error = "Network error - could not reach the Controller. Plese check your connection";
+                $scope.ota_error = "Network error - could not reach the Controller. Please check your connection";
                 $scope.processing = false;
             } else {
                 $scope.ota_error = false;

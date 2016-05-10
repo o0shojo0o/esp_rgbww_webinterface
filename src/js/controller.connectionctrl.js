@@ -26,9 +26,9 @@ function ConnectionCtrl($scope, $mdDialog, espConnectionFactory, esprgbww, wifi)
         espConnectionFactory.connectWifi(wifi.ssid, wifi.password).then( function(data) {
             $scope.connection = data;
             if(data.status == 2) {
-                espConnectionFactory.systemCMD("stopapandrestart");
+                espConnectionFactory.systemCMD("restart");
             } else if(data.status == -1) {
-                $scope.error = "Network error:  could not reach the controller.  Please try again";
+                $scope.error = "Network error: could not reach the controller. Please try again";
             }
             $scope.processing = false;
         });

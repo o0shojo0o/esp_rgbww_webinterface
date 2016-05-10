@@ -15,7 +15,7 @@ angular
 function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope) {
     var vm = this;
     var gotConfig = false;
-    $scope.isOnline = $rootScope.online;
+    $scope.isOnline = checkOnline;
     $scope.refreshnetwork = refreshNetwork;
     $scope.connect = doConnect;
     $scope.canconnect = canConnect;
@@ -26,6 +26,7 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
     init();
 
     function init() {
+        
         $scope.netloading = true;
         espConnectionFactory.getConfig().then(function(data) {
             if (data == false) {
@@ -80,9 +81,13 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
         });
     }
 
+    function checkOnline() {
+        return $rootScope.isOnline;
+    }
+
     function canConnect() {
 
-        if ( $scope.isOnline == true && (($scope.wnetwork.ssid != "" &&($scope.wnetwork.encryption == "OPEN") ||
+        if ( $scope.isOnline() == true && (($scope.wnetwork.ssid != "" &&($scope.wnetwork.encryption == "OPEN") ||
                 ($scope.wnetwork.encryption != "OPEN" && $scope.wnetwork.password != "" ))))
         {
             return true;
@@ -90,15 +95,13 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
 
         return false;
     }
+    $scope.$on('online', function(e) {
+        $scope.conStatus.online = true;
+        init();
+    });
 
-
-    $rootScope.$watch('online', function(newValue, oldValue) {
-        $scope.isOnline = newValue;
-        if (newValue !== oldValue) {
-            if(newValue && !gotConfig) {
-                init();
-            }
-        }
+    $scope.$on('offline', function(e) {
+        $scope.conStatus.online = false;
     });
 
 }
