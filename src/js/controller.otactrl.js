@@ -13,7 +13,8 @@
         .controller('OTACtrl', OTACtrl);
 
 
-function OTACtrl($scope, $mdDialog, $http, $timeout, $window, espConnectionFactory, url, fwversion, webappversion) {
+function OTACtrl($scope, $mdDialog, $http, $timeout, $window, $rootScope, espConnectionFactory, url, fwversion, webappversion) {
+    // vars
     $scope.step = 0;
     $scope.processing = true;
     $scope.ota_error = false;
@@ -22,11 +23,20 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, espConnectionFacto
     $scope.fwversion = fwversion;
     $scope.webappversion = webappversion;
     $scope.reloadCounter = 15;
+
+    // scope functions
+    $scope.processupdate = processupdate;
+    $scope.reloadWebIF = reloadWebIF;
+    $scope.cancel = cancelDialog;
+    $scope.isOnline = checkOnline;
+
+    // init
     initOTACtrl();
 
     function initOTACtrl() {
         // 0 = checking url
         // 1 = processing update
+
         $scope.processing = true;
         $http.get(url).then(function(result) {
             //check for valid
@@ -112,11 +122,11 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, espConnectionFacto
         }, 1000);
     }
 
-    $scope.reloadWebIF = function() {
+    function reloadWebIF() {
         $window.location.reload();
-    };
+    }
 
-    $scope.processupdate = function() {
+    function processupdate() {
         $scope.step = 1;
         $scope.processing = true;
         $scope.ota_error = false;
@@ -133,11 +143,15 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, espConnectionFacto
 
         });
 
-    };
+    }
 
-    $scope.cancel = function() {
+    function checkOnline() {
+        return $rootScope.isOnline;
+    }
+
+    function cancelDialog() {
         $mdDialog.cancel();
-    };
+    }
 
 }
 

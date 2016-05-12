@@ -35,9 +35,10 @@ function espConnectionFactory($http, $timeout) {
         return $http.get('/config').then(function(result) {
             return result.data;
         }, function(result) {
-            false;
+            return false;
         });
     }
+
     function saveConfig(settings, r) {
         var newsettings = JSON.parse(JSON.stringify(settings));
 
@@ -114,6 +115,7 @@ function espConnectionFactory($http, $timeout) {
             })
         }
     }
+
     function setColor(color, colortemp) {
         var hsv = color.toHsv();
         var data  = {
@@ -149,7 +151,7 @@ function espConnectionFactory($http, $timeout) {
         var poll = function() {
             return $timeout(function () {
                 return $http.get('/connect', {timeout: 10000}).then(function (result) {
-                    if (result.data.status != 1) {
+                    if (safeObjectPath(result.data, "status") && result.data.status != 1) {
                         return result.data;
                     } else {
                         return poll();
@@ -160,8 +162,7 @@ function espConnectionFactory($http, $timeout) {
                         retries++;
                         return poll();
                     }
-                    var data = {status: -1, error: 'network error'};
-                    return data;
+                    return {status: -1, error: 'network error'};
                 });
             }, 2000);
         };
@@ -169,8 +170,7 @@ function espConnectionFactory($http, $timeout) {
             return poll();
         }, function(result) {
             //failed to connect
-            var data = {status: -1, error: 'network error'};
-            return data;
+            return {status: -1, error: 'network error'};
         });
     }
 
@@ -183,6 +183,7 @@ function espConnectionFactory($http, $timeout) {
         });
 
     }
+
     function initUpdate(update) {
         return $http.post('/update', update).then(function(result) {
             return safeObjectPath(result.data, "success");
@@ -207,4 +208,5 @@ function espConnectionFactory($http, $timeout) {
         });
     }
 }
+
 })();

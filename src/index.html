@@ -839,7 +839,7 @@
         <md-dialog-actions ng-show="ota_error == false && processing == false && step == 0" class="ng-hide">
 
             <md-button  ng-click="cancel()" class="md-primary" >Cancel</md-button>
-            <md-button  ng-click="processupdate()" class="md-primary" >Update</md-button>
+            <md-button  ng-click="processupdate()" class="md-primary" ng-disabled="isOnline() == false">Update</md-button>
         </md-dialog-actions>
     </md-dialog>
 </script>

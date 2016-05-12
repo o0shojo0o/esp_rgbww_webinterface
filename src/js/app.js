@@ -23,14 +23,6 @@ angular
         });
     }
 
-    $rootScope.$on('online', function(e) {
-        showConnectionToast(true, 2000);
-    });
-
-    $rootScope.$on('offline', function(e) {
-        showConnectionToast(false, 0);
-    });
-
     function showConnectionToast(connected, delay) {
         $mdToast.show({
             hideDelay   : delay,
@@ -40,6 +32,14 @@ angular
             templateUrl : 'ConnectionToast.html'
         });
     }
+
+    $rootScope.$on('online', function(e) {
+        showConnectionToast(true, 2000);
+    });
+
+    $rootScope.$on('offline', function(e) {
+        showConnectionToast(false, 0);
+    });
 
 });
 })();

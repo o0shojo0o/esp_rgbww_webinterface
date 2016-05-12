@@ -20,8 +20,6 @@ function OfflineCheckInterceptor ($rootScope) {
         responseError: respErr,
         response: resp
     };
-
-
     return Interceptor;
 
     function resp(response) {

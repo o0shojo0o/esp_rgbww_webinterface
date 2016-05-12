@@ -14,18 +14,28 @@ angular
 
 function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, espConnectionFactory) {
 
-    $scope.isOnline = checkOnline;
+    // variables
     $scope.saving = false;
     $scope.webappversion = version;
     $scope.color = new tinycolor("rgb (0, 0, 0)");
     $scope.hsvcolor = { whitebalance: 0 };
     $scope.colormodes = colormodes;
     $scope.hsvmodes = hsvmodes;
+
+    // functions
+    $scope.isOnline = checkOnline;
+    $scope.exportSettings = exportSettings;
+    $scope.navigateTo = navigateTo;
+    $scope.openMenu = openMenu;
+    $scope.setColor = setColor;
+    $scope.saveConfig = saveConfig;
+    $scope.initUpdate = initUpdate;
+    $scope.showConfirm = showConfirm;
+
+    // initialize controller
     init();
 
     function init() {
-
-        if(!$scope.isOnline()) return;
         fetchInfo();
         fetchColor();
     }
@@ -65,21 +75,20 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
         });
     }
 
-    $scope.openMenu = function() {
+    function openMenu() {
         $mdSidenav('menu').toggle();
+    }
 
-    };
-
-    $scope.navigateTo = function(to, event) {
+    function navigateTo(to, event) {
         $mdSidenav('menu').toggle();
         $scope.tabs.selectedIndex = to;
+    }
 
-    };
-
-    $scope.setColor = function() {
+    function setColor() {
         espConnectionFactory.setColor($scope.color, $scope.hsvcolor.whitebalance)
-    };
-    $scope.saveConfig = function() {
+    }
+
+    function saveConfig() {
         $scope.saving = true;
         espConnectionFactory.saveConfig($scope.esprgbww, true).then(function(result){
             if(result == false) {
@@ -87,9 +96,9 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
             }
             $scope.saving = false;
         });
-    };
+    }
 
-    $scope.initUpdate = function(ev) {
+    function initUpdate(ev) {
         var url = $scope.esprgbww.ota.url;
         var fwversion = $scope.ctrlinfo.firmware;
         var webappversion = $scope.webappversion;
@@ -106,15 +115,16 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
             clickOutsideToClose:false
         });
 
-    };
+    }
 
-    $scope.showConfirm = function(ev, title, cmd, msg, msg_success) {
+    function showConfirm(ev, title, cmd, msg, msg_success) {
         var info = {
             "title": title,
             "cmd": cmd,
             "msg": msg,
             "msg_success": msg_success
         };
+
         $mdDialog.show({
             controller: 'OkCancelCtrl',
             templateUrl: 'okcancledialog.html',
@@ -125,44 +135,39 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
             },
             clickOutsideToClose:false
         });
-    };
+    }
 
-    $scope.exportSettings = function () {
+    function exportSettings () {
 
         if (typeof $scope.esprgbww === 'object') {
 
             var data = {
                 network : {
-                    mqtt: $scope.esprgbww.network.mqtt,
-                    //udpserver: $scope.esprgbww.network.udpserver,
-                    //tcpserver: $scope.esprgbww.network.tcpserver
+                    mqtt: $scope.esprgbww.network.mqtt
                 },
                 color: $scope.esprgbww.color
             };
-            data = JSON.stringify(data, undefined, 2);
+            data = JSON.stringify(data, undefined, 2)
         } else {
             data = {}
         }
 
-        var blob = new Blob([data], {type: 'text/json'}),
-            e = document.createEvent('MouseEvents'),
-            a = document.createElement('a');
-
+        var blob = new Blob([data], {type: 'text/json'}), e = document.createEvent('MouseEvents'), a = document.createElement('a');
         a.download = "rgbwwsetting.json";
         a.href = window.URL.createObjectURL(blob);
         a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-        e.initEvent('click', true, false, window,
-            0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
         a.dispatchEvent(e);
-    };
-
-    $scope.$on('mdColorPicker:updateColor', function(e) {
-        $scope.setColor();
-    });
+    }
 
     function checkOnline() {
         return $rootScope.isOnline;
     }
+
+    // watches for broadcast
+    $scope.$on('mdColorPicker:updateColor', function(e) {
+        $scope.setColor();
+    });
 
     $scope.$on('online', function(e) {
         init();

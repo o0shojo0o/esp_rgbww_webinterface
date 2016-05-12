@@ -28,6 +28,7 @@ function OkCancelCtrl($scope, $mdDialog, espConnectionFactory, info) {
         }
 
     };
+    
     $scope.cancel = function() {
         $mdDialog.cancel();
     };

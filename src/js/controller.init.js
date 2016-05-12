@@ -13,7 +13,6 @@ angular
     .controller('initCtrl', initCtrl);
     
 function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope) {
-    var vm = this;
     var gotConfig = false;
     $scope.isOnline = checkOnline;
     $scope.refreshnetwork = refreshNetwork;
@@ -26,24 +25,25 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
     init();
 
     function init() {
-        
-        $scope.netloading = true;
-        espConnectionFactory.getConfig().then(function(data) {
-            if (data == false) {
-                $scope.esprgbww = {};
-                $scope.netloading = false;
-            } else {
-                $scope.esprgbww = data;
-                gotConfig = true;
-                $scope.refreshnetwork(false);
-            }
-        });
-        /*
-         * espConnectionFactory.getInfo().then(function(data) {
-         *   $scope.ctrlinfo = data;
-         * });
-         */
-        //
+        if(!gotConfig) {
+            $scope.netloading = true;
+            espConnectionFactory.getConfig().then(function(data) {
+                if (data == false) {
+                    $scope.esprgbww = {};
+                    $scope.netloading = false;
+                } else {
+                    $scope.esprgbww = data;
+                    gotConfig = true;
+                    $scope.refreshnetwork(false);
+                }
+            });
+            /*
+             * espConnectionFactory.getInfo().then(function(data) {
+             *   $scope.ctrlinfo = data;
+             * });
+             */
+            //
+        }
     }
 
 
@@ -95,13 +95,9 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
 
         return false;
     }
+    
     $scope.$on('online', function(e) {
-        $scope.conStatus.online = true;
         init();
-    });
-
-    $scope.$on('offline', function(e) {
-        $scope.conStatus.online = false;
     });
 
 }
