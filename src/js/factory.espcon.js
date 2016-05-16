@@ -82,38 +82,37 @@ function espConnectionFactory($http, $timeout) {
 
     function getNetworks(scan) {
         scan = typeof scan !== 'undefined' ? scan : false;
+        var retries = 0;
+        function poll() {
+            return $http.get('/networks', {timeout: 10000}).then(function (result) {
+                if (result.data.scanning == false) {
+                    return result.data;
+                }
+                if (retries < 20) {
+                    retries++;
+                    return $timeout(poll, 2000);
+                }
+                return false;
+            }, function(result) {
+                if (retries < 20) {
+                    retries++;
+                    return $timeout(poll, 2000);
+                }
+                return false;
+            })
+        }
+
         if (scan == true) {
-            var retries = 0;
             return $http.post('/scan_networks', {cmd:'refresh'}).then(function(result) {
                 if(!safeObjectPath(result.data, "success")) {
                     return false;
                 }
-                var poll = function() {
-                    return $timeout(function () {
-                        return $http.get('/networks', {timeout: 10000}).then(function (result) {
-                            if (result.data.scanning == false) {
-                                return result.data;
-                            } else {
-                                if (retries < 30) {
-                                    retries++;
-                                    return poll();
-                                } else {
-                                    return false;
-                                }
-                            }
-
-                        })
-                    }, 2000);
-                };
                 return poll();
-            });
-        } else {
-            return $http.get('/networks').then(function (result) {
-                return result.data;
-            }, function(result) {
+            }, function(result){
                 return false;
-            })
+            });
         }
+        return poll();
     }
 
     function setColor(color, colortemp) {
@@ -141,33 +140,30 @@ function espConnectionFactory($http, $timeout) {
             return result.data;
         }, function (data) {
             return false;
-
         });
     }
 
     function connectWifi(ssid, password) {
         var data = {ssid: ssid, password: password};
         var retries = 0;
-        var poll = function() {
-            return $timeout(function () {
-                return $http.get('/connect', {timeout: 10000}).then(function (result) {
-                    if (safeObjectPath(result.data, "status") && result.data.status != 1) {
-                        return result.data;
-                    } else {
-                        return poll();
-                    }
-
-                }, function(result) {
-                    if (retries < 5) {
-                        retries++;
-                        return poll();
-                    }
-                    return {status: -1, error: 'network error'};
-                });
-            }, 2000);
+        function poll() {
+            return $http.get('/connect', {timeout: 10000}).then(function (result) {
+                if (safeObjectPath(result.data, "status") && result.data.status != 1) {
+                    return result.data;
+                }
+                return $timeout(poll, 2000);
+            }, function(result) {
+                if (retries < 10) {
+                    retries++;
+                    return $timeout(poll, 2000);
+                }
+                return {status: -1, error: 'network error'};
+            });
         };
+
         return $http.post('/connect', data).then(function(result) {
-            return poll();
+            // issued connect, poll status
+            return $timeout(poll, 2000);
         }, function(result) {
             //failed to connect
             return {status: -1, error: 'network error'};

@@ -12,24 +12,38 @@
         .module('rgbwwApp')
         .controller('OkCancelCtrl', OkCancelCtrl);
 
-function OkCancelCtrl($scope, $mdDialog, espConnectionFactory, info) {
+function OkCancelCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, info) {
+
+    // vars
     $scope.dialog = {"title": info.title, "msg": info.msg, "buttons":true}
     var close = typeof info.msg_success !== 'undefined' ? false : true;
 
-    $scope.ok = function() {
-        espConnectionFactory.systemCMD(info.cmd);
-        if(close == true) {
-            $mdDialog.hide();
-        }
-        else
-        {
+    // functions
+    $scope.ok = dialogAction;
+    $scope.cancel = closeDialog;
+
+    function dialogAction() {
+        espConnectionFactory.systemCMD(info.cmd).then(function(result){
+            if(result == false) {
+                $scope.dialog.buttons = true;
+                $scope.dialog.msg = 'An error occured, please try again.';
+                return;
+            }
+
+            if(close == true) {
+                $mdDialog.hide();
+                return;
+            }
+            
             $scope.dialog.buttons = false;
             $scope.dialog.msg = info.msg_success;
-        }
+
+        });
+
 
     };
     
-    $scope.cancel = function() {
+    function closeDialog() {
         $mdDialog.cancel();
     };
 }

@@ -13,36 +13,42 @@ angular
     .controller('initCtrl', initCtrl);
     
 function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope) {
+
+    // vars
     var gotConfig = false;
+    $scope.netloading = false;
+    $scope.wnetwork = {ssid: "", id: "", encryption: "OPEN", password: ""};
+    $scope.wlandata = {password: ""};
+
+    // functions
     $scope.isOnline = checkOnline;
     $scope.refreshnetwork = refreshNetwork;
     $scope.connect = doConnect;
     $scope.canconnect = canConnect;
     $scope.webappversion = version;
-    $scope.netloading = false;
-    $scope.wnetwork = {ssid: "", id: "", encryption: "OPEN", password: ""};
-    $scope.wlandata = {password: ""};
+
+    // run init when controller is in scope
     init();
 
     function init() {
+
+        // only run init if we didn`t yet receive the configuration
+        // assume the last known configuraiton is correct when
+        // we show the initial interface
         if(!gotConfig) {
             $scope.netloading = true;
             espConnectionFactory.getConfig().then(function(data) {
                 if (data == false) {
+                    gotConfig = false;
                     $scope.esprgbww = {};
                     $scope.netloading = false;
-                } else {
-                    $scope.esprgbww = data;
-                    gotConfig = true;
-                    $scope.refreshnetwork(false);
+                    return;
                 }
+                gotConfig = true;
+                $scope.esprgbww = data;
+                $scope.refreshnetwork(false);
+
             });
-            /*
-             * espConnectionFactory.getInfo().then(function(data) {
-             *   $scope.ctrlinfo = data;
-             * });
-             */
-            //
         }
     }
 
@@ -60,8 +66,7 @@ function initCtrl($scope, $mdDialog, $mdToast, espConnectionFactory, $rootScope)
         });
     }
 
-
-     function doConnect(ev) {
+    function doConnect(ev) {
 
         var wifi = {
             ssid: $scope.wnetwork.ssid,

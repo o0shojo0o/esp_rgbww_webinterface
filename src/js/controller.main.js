@@ -14,13 +14,15 @@ angular
 
 function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, espConnectionFactory) {
 
-    // variables
+    // vars
     $scope.saving = false;
     $scope.webappversion = version;
     $scope.color = new tinycolor("rgb (0, 0, 0)");
     $scope.hsvcolor = { whitebalance: 0 };
     $scope.colormodes = colormodes;
     $scope.hsvmodes = hsvmodes;
+    var prev_color = $scope.color;
+    var prev_hsvcolor = $scope.hsvcolor;
 
     // functions
     $scope.isOnline = checkOnline;
@@ -71,7 +73,9 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
             }
             $scope.color = new tinycolor({ h: data.hsv.h, s: data.hsv.s, v: data.hsv.v });
             $scope.hsvcolor.whitebalance = data.hsv.ct;
-            $scope.$broadcast( 'mdColorPicker:colorSet');
+            prev_color = $scope.color;
+            prev_hsvcolor = $scope.hsvcolor;
+            $scope.$broadcast('mdColorPicker:colorSet');
         });
     }
 
@@ -85,14 +89,28 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
     }
 
     function setColor() {
-        espConnectionFactory.setColor($scope.color, $scope.hsvcolor.whitebalance)
+        espConnectionFactory.setColor($scope.color, $scope.hsvcolor.whitebalance).then(function(result) {
+            if(result == false) {
+                $mdToast.showSimple("could not change color");
+
+                // restore colorpicker to old vars
+                $scope.color = prev_color;
+                $scope.hsvcolor = prev_hsvcolor;
+                $scope.$broadcast('mdColorPicker:colorSet');
+                return;
+            }
+
+            prev_color = $scope.color;
+            prev_hsvcolor = $scope.hsvcolor;
+
+        });
     }
 
     function saveConfig() {
         $scope.saving = true;
         espConnectionFactory.saveConfig($scope.esprgbww, true).then(function(result){
             if(result == false) {
-             $mdToast.showSimple("something went wrong while saving the configuration");
+                $mdToast.showSimple("something went wrong while saving the configuration");
             }
             $scope.saving = false;
         });

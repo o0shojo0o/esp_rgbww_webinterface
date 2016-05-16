@@ -14,7 +14,9 @@ angular
         $mdThemingProvider.theme('default').primaryPalette('blue').accentPalette('deep-purple');
         }
     ).run(function($rootScope, $timeout, $mdToast, espConnectionFactory) {
-    
+
+    // start connection checking after
+    // angular app is initialized
     checkConnection();
 
     function checkConnection() {
@@ -33,6 +35,7 @@ angular
         });
     }
 
+    // show connected/disconnected toast
     $rootScope.$on('online', function(e) {
         showConnectionToast(true, 2000);
     });

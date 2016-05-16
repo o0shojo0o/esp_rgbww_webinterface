@@ -23,8 +23,9 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, $rootScope, espCon
     $scope.fwversion = fwversion;
     $scope.webappversion = webappversion;
     $scope.reloadCounter = 15;
+    var ota_retries = 0;
 
-    // scope functions
+    // functions
     $scope.processupdate = processupdate;
     $scope.reloadWebIF = reloadWebIF;
     $scope.cancel = cancelDialog;
@@ -45,13 +46,9 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, $rootScope, espCon
             if (!safeObjectPath(data, "rom.fw_version") || !safeObjectPath(data, "rom.url") ||
                 !safeObjectPath(data, "spiffs.webapp_version") || !safeObjectPath(data, "spiffs.url")) {
                 $scope.ota_error = "Received malformed response";
-            }
-            else
-            {
+            } else {
                 $scope.updateinfo = data;
             }
-
-
         }, function(result) {
             $scope.processing = false;
             if(result.status != -1) {
@@ -64,50 +61,53 @@ function OTACtrl($scope, $mdDialog, $http, $timeout, $window, $rootScope, espCon
 
     }
 
-    var ota_retries = 0;
+
     function ota_poll(freq) {
-        $timeout(function() {
-            espConnectionFactory.getUpdatestatus().then(function (result) {
-                if (result == false) {
+        $timeout(checkOta, freq);
+    }
 
-                    if ($scope.step == 2) {
+    function checkOta() {
+        espConnectionFactory.getUpdatestatus().then(function (result) {
+            if (result == false) {
 
-                        if (ota_retries < 10) {
-                            ota_retries++;
-                            ota_poll(5000);
-                        } else {
-                            $scope.processing = false;
-                            $scope.ota_error = "OTA failed - could not reach the Controller after reboot"
-                        }
+                if ($scope.step == 2) {
+
+                    if (ota_retries < 10) {
+                        ota_retries++;
+                        ota_poll(5000);
                     } else {
-
                         $scope.processing = false;
-                        $scope.ota_error = "Network error - could not reach the Controller. Please check your connection"
+                        $scope.ota_error = "OTA failed - could not reach the Controller after reboot"
                     }
                 } else {
-                    if (result.status == 1) {
-                        // processing
-                        ota_poll(2000);
-                    } else if (result.status == 2) {
-                        // download okay - need to reboot
-                        $scope.step = 2;
-                        espConnectionFactory.systemCMD("restart");
-                        ota_poll(5000);
 
-                    } else if (result.status == 3) {
-                        // successfull ota after reboot
-                        reloadCountDown();
-                        $scope.processing = false;
-
-                    } else if (result.status == 4 || result.status == 0) {
-                        // error occured
-                        $scope.processing = false;
-                        $scope.ota_error = "OTA failed - please restart the controller and try again"
-                    }
+                    $scope.processing = false;
+                    $scope.ota_error = "Network error - could not reach the Controller. Please check your connection"
                 }
+                
+            } else {
+                if (result.status == 1) {
+                    // processing
+                    ota_poll(2000);
+                } else if (result.status == 2) {
+                    // download okay - need to reboot
+                    $scope.step = 2;
+                    espConnectionFactory.systemCMD("restart");
+                    ota_poll(5000);
 
-            })
-        }, freq);
+                } else if (result.status == 3) {
+                    // successfull ota after reboot
+                    reloadCountDown(); // start countdown display
+                    $scope.processing = false;
+
+                } else if (result.status == 4 || result.status == 0) {
+                    // error occured
+                    $scope.processing = false;
+                    $scope.ota_error = "OTA failed - please restart the controller and try again"
+                }
+            }
+
+        })
     }
 
     function reloadCountDown() {

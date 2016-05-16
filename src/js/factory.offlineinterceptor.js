@@ -49,6 +49,7 @@ function OfflineCheckInterceptor ($rootScope, $q) {
                 $rootScope.$broadcast('offline');
             }
         }
+        // reject response to trigger proper error handling
         return $q.reject(response);
     }
  }
