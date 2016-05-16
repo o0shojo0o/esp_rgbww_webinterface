@@ -1,7 +1,7 @@
 {
   "name": "rgbww-interface",
   "description": "Interface for the rgbwwctrl",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "homepage": "https://github.com/patrickjahns",
   "authors": [
     "patrick jahns <github@patrickjahns.de>"
