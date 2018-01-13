@@ -448,7 +448,7 @@
                             </md-card>
                         </div>
                     </div>
-
+<!--
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center">
                             <md-card flex="50">
@@ -519,10 +519,11 @@
 
                                     </div>
                                     </div>
-                                </md-card-content>
+                                </md-card-content>                        
                             </md-card>
                         </div>
                     </div>
+                        -->
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center">
                             <md-card flex="50"  class="bottomcard">
@@ -586,7 +587,7 @@
                 </div>
                 <div role="tabpanel" id="tab4-content" aria-labelledby="tab4" ng-switch-when="3" ng-cloak>
 
-                    <div  layout="column" layout-align="center" >
+                    <div  layout="column" layout-align="center" >                        
                         <div layout="row" layout-align="center center">
                             <md-card flex="50" >
                                 <md-card-header>
@@ -678,8 +679,10 @@
                                 <md-card-content>
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">Firmware </span>
-                                        <span class="md-caption">{{ ctrlinfo.firmware }}</span>
+                                        <span class="md-caption">{{ ctrlinfo.git_version }}</span>
+                                       <!-- 
                                         <span ng-show="ctrlinfo.git_version != 'unknown'" class="md-caption ng-hide">&nbsp;&nbsp;({{ ctrlinfo.git_version }})</span>
+                                       -->
                                     </div>
                                     <div layout="row" layout-align="start center" >
                                         <span flex="40" layout-padding class="md-caption">Web Interface </span>
@@ -699,7 +702,7 @@
                                         <span class="card-subtitle" >Update Firmware </span>
                                     </div>
                                     <span class="md-caption">Be sure to only apply updates from trusted sources.</span>
-                                    <span class="md-caption">Official Firmware updates are available <a href="http://patrickjahns.github.io/esp_rgbww_firmware/index.html" target="_blank">via Github</a></span>
+                                    <span class="md-caption">Official Firmware updates are available <a href="http://rgbww.dronezone.de/index.html" target="_blank">via Github</a></span>
                                     <div layout="column" layout-align="center start" >
 
                                         <md-input-container style="width:100%; margin-bottom: 0px!important;">
