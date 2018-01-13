@@ -1,6 +1,6 @@
 {
   "name": "rgbww-webapp",
-  "version": "0.3.3",
+  "version": "0.3.3-shojo2",
   "description": "Web frontend for RGBWW Controller",
   "main": "Gruntfile.js",
   "scripts": {
@@ -17,7 +17,8 @@
     "url": "https://github.com/patrickjahns/esp_rgbww_webinterface/issues"
   },
   "homepage": "https://github.com/patrickjahns/esp_rgbww_webinterface#readme",
-  "devDependencies": {
+  "dependencies": {
+    "bower": "^1.8.2",
     "grunt": "^0.4.5",
     "grunt-cache-breaker": "^2.0.1",
     "grunt-contrib-compress": "^1.1.1",
