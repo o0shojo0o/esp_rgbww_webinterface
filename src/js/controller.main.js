@@ -118,7 +118,7 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
 
     function initUpdate(ev) {
         var url = $scope.esprgbww.ota.url;
-        var fwversion = $scope.ctrlinfo.firmware;
+        var fwversion = $scope.ctrlinfo.git_version;
         var webappversion = $scope.webappversion;
         $mdDialog.show({
             controller: 'OTACtrl',

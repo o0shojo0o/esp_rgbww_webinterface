@@ -9,7 +9,7 @@
  */
 
 // will be fetched from controller by default
-var updateurl = "http://patrickjahns.github.io/esp_rgbww_firmware/release/version.json";
+var updateurl = "http://rgbww.dronezone.de/release/version.json";
 
 var version = "{{ VERSION }}";
 
