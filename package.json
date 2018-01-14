@@ -1,6 +1,6 @@
 {
   "name": "rgbww-webapp",
-  "version": "0.3.3-shojo2",
+  "version": "0.3.3-shojo3",
   "description": "Web frontend for RGBWW Controller",
   "main": "Gruntfile.js",
   "scripts": {
