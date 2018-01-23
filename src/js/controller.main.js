@@ -21,6 +21,8 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
     $scope.hsvcolor = { whitebalance: 0 };
     $scope.colormodes = colormodes;
     $scope.hsvmodes = hsvmodes;
+    $scope.pinConfigs = pinConfigs;
+    $scope.custom_pin_config = true
     var prev_color = $scope.color;
     var prev_hsvcolor = $scope.hsvcolor;
 
@@ -61,6 +63,15 @@ function mainCtrl($scope, $mdSidenav, $mdDialog, $mdToast, $http, $rootScope, es
                 data.network.connection.netmask = $scope.ctrlinfo.connection.netmask;
                 data.network.connection.gateway = $scope.ctrlinfo.connection.gateway;
                 $scope.esprgbww = data;
+
+                // Check for Custom PinConfig
+                angular.forEach(pinConfigs, function(value, key) {
+                    if (value.value ==  $scope.esprgbww.general.pin_config)
+                    {
+                        $scope.custom_pin_config = false;
+                        return;
+                    }            
+                 });                   
             });
         });
     }

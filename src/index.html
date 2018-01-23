@@ -108,36 +108,28 @@
         <div flex hide-xs> </div>
         <md-tabs md-no-ink md-center-tabs md-selected="tabs.selectedIndex" hide-xs>
             <md-tab id="tab1"  aria-controls="tab1-content">Start</md-tab>
-            <md-tab id="tab2" aria-controls="tab3-content">Color Settings</md-tab>
-            <md-tab id="tab3" aria-controls="tab2-content">Network Settings</md-tab>
-
+            <md-tab id="tab2" aria-controls="tab2-content">Color Settings</md-tab>
+            <md-tab id="tab3" aria-controls="tab3-content">Network Settings</md-tab>
             <md-tab id="tab4" aria-controls="tab4-content">System Settings</md-tab>
-
         </md-tabs >
         <div flex hide-xs> </div>
 
 
     </md-toolbar>
-
     <div class="container" layout="row" flex >
-
         <md-content flex id="content" style="background-color: #e1e1e1;" >
-
             <ng-switch on="tabs.selectedIndex" class="tabpanel-container">
                 <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="0" ng-cloak>
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center"  >
                             <md-card flex="50" >
                                 <md-card-header >
-                                    <md-card-header-text >
-
+                                    <md-card-header-text>
                                         <span class="md-title">
                                         <md-icon class="md-card-icon">
                                         <svg-icon name="palette"></svg-icon>
                                         </md-icon>Color</span>
-
                                     </md-card-header-text>
-
                                 </md-card-header>
                                 <md-divider></md-divider>
                                 <md-card-content style="padding-top:0px;">
@@ -164,197 +156,189 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="1" ng-cloak>
-                    <div  layout="column" layout-align="center" >
-                        <div layout="row" layout-align="center center"  >
-                            <md-card flex="50" >
-                                <md-card-header >
-                                    <md-card-header-text >
-
-                                        <span class="md-title"> <md-icon class="md-card-icon">
-                                        <svg-icon name="tune"></svg-icon>
-                                        </md-icon> HSV</span>
-
-                                    </md-card-header-text>
-
-                                </md-card-header>
-                                <md-divider></md-divider>
-                                <md-card-content>
-
-                                    <div layout="row" layout-align="center center" layout-align-xs="start end">
-                                        <div flex hide-xs class="sliderlabel" >
-
-                                            <span >Calculation Model</span>
-
+                <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="1" ng-cloak>                    
+                        <div  layout="column" layout-align="center" >
+                            <div layout="row" layout-align="center center"  >
+                                <md-card flex="50" >
+                                    <md-card-header >
+                                        <md-card-header-text >
+                                            <span class="md-title"> <md-icon class="md-card-icon">
+                                            <svg-icon name="tune"></svg-icon>
+                                            </md-icon> HSV</span>
+                                        </md-card-header-text>
+                                    </md-card-header>
+                                    <md-divider></md-divider>
+                                    <md-card-content>
+                                        <div layout="row" layout-align="center center" layout-align-xs="start end">
+                                            <div flex hide-xs class="sliderlabel" >
+                                                <span >Calculation Model</span>
+                                            </div>
+                                            <md-input-container class="cardselect">
+                                                <md-select ng-model="esprgbww.color.hsv.model">
+                                                    <label show-xs>Calculation Model</label>
+                                                    <md-option ng-value="model.id" ng-repeat="model in hsvmodes" value="{{model.id}}">
+                                                        {{model.title}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <div hide-gt-xs style="width:30px"></div>
                                         </div>
-                                        <md-input-container class="cardselect">
-
-                                            <md-select ng-model="esprgbww.color.hsv.model">
-                                                <label show-xs>Calculation Model</label>
-                                                <md-option ng-value="model.id" ng-repeat="model in hsvmodes" value="{{model.id}}">
-                                                    {{model.title}}
-                                                </md-option>
-                                            </md-select>
-
-                                        </md-input-container>
-                                        <div hide-gt-xs style="width:30px"></div>
-                                    </div>
-                                    <div ng-hide="esprgbww.color.hsv.model == 2">
-                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start" style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel" >
-                                            <span>Red</span>
+                                        <div ng-hide="esprgbww.color.hsv.model == 2">
+                                        <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start" style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel" >
+                                                <span>Red</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.hsv.red" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Red">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.hsv.red" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Red">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Yellow</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Yellow</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.hsv.yellow" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Yellow">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.hsv.yellow" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Yellow">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span >Green</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start" style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span >Green</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.hsv.green" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Green">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.hsv.green" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Green">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Cyan</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Cyan</span>
+                                            </div>
+                                            <md-slider  ng-model="esprgbww.color.hsv.cyan" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Cyan">
+                                            </md-slider>
                                         </div>
-                                        <md-slider  ng-model="esprgbww.color.hsv.cyan" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Cyan">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Blue</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Blue</span>
+                                            </div>
+                                            <md-slider  ng-model="esprgbww.color.hsv.blue" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Blue">
+                                            </md-slider>
                                         </div>
-                                        <md-slider  ng-model="esprgbww.color.hsv.blue" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Blue">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Magenta</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center"  layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Magenta</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.hsv.magenta" min="-30" max="30" md-discrete class="centerslider" aria-label="HSV Magenta">
-                                        </md-slider>
-                                    </div>
-                                    </div>
-                                </md-card-content>
-                            </md-card>
+                                        </div>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
                         </div>
-                    </div>
-                    <div  layout="column" layout-align="center" >
-                        <div layout="row" layout-align="center center"  >
-                            <md-card flex="50" >
-                                <md-card-header >
-                                    <md-card-header-text >
+                        <div  layout="column" layout-align="center" >
+                            <div layout="row" layout-align="center center"  >
+                                <md-card flex="50" >
+                                    <md-card-header >
+                                        <md-card-header-text >
 
-                                        <span class="md-title"> <md-icon md-font-set="material-icons" class="md-card-icon">
-                                            <svg-icon name="palette"></svg-icon>
-                                        </md-icon> Color</span>
+                                            <span class="md-title"> <md-icon md-font-set="material-icons" class="md-card-icon">
+                                                <svg-icon name="palette"></svg-icon>
+                                            </md-icon> Color</span>
 
-                                    </md-card-header-text>
+                                        </md-card-header-text>
 
-                                </md-card-header>
-                                <md-divider></md-divider>
-                                <md-card-content>
-                                    <div layout="row"  layout-align="center center"  layout-align-xs="start end">
-                                        <div flex hide-xs class="sliderlabel" >
+                                    </md-card-header>
+                                    <md-divider></md-divider>
+                                    <md-card-content>
+                                        <div layout="row"  layout-align="center center"  layout-align-xs="start end">
+                                            <div flex hide-xs class="sliderlabel" >
 
-                                            <span >Output Model</span>
+                                                <span >Output Model</span>
+                                            </div>
+                                            <md-input-container class="cardselect">
+
+                                                <md-select ng-model="esprgbww.color.outputmode">
+                                                    <label show-xs>Output Model</label>
+                                                    <md-option ng-value="model.id" ng-repeat="model in colormodes" value="{{model.id}}">
+                                                        {{model.title}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <div hide-gt-xs style="width:30px"></div>
                                         </div>
-                                        <md-input-container class="cardselect">
-
-                                            <md-select ng-model="esprgbww.color.outputmode">
-                                                <label show-xs>Output Model</label>
-                                                <md-option ng-value="model.id" ng-repeat="model in colormodes" value="{{model.id}}">
-                                                    {{model.title}}
-                                                </md-option>
-                                            </md-select>
-                                        </md-input-container>
-                                        <div hide-gt-xs style="width:30px"></div>
-                                    </div>
-                                    <div style="margin-top:15px;">
-                                        <span class="card-subtitle" >Led Brightness </span>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 10px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel" >
-                                            <span>Red</span>
+                                        <div style="margin-top:15px;">
+                                            <span class="card-subtitle" >Led Brightness </span>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.brightness.red" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Red">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Green</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 10px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel" >
+                                                <span>Red</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.brightness.red" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Red">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.brightness.green" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Green">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Blue</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Green</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.brightness.green" min="0" max="100" md-discrete  class="colorslider" aria-label="Brightness Green">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.brightness.blue" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Blue">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 2" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Warm White</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Blue</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.brightness.blue" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Blue">
+                                            </md-slider>
                                         </div>
-                                        <md-slider  ng-model="esprgbww.color.brightness.ww" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Warm White">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 1" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Cold White</span>
+                                        <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 2" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Warm White</span>
+                                            </div>
+                                            <md-slider  ng-model="esprgbww.color.brightness.ww" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Warm White">
+                                            </md-slider>
                                         </div>
-                                        <md-slider ng-model="esprgbww.color.brightness.cw" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Cold White">
-                                        </md-slider>
-                                    </div>
+                                        <div layout="row" ng-hide="esprgbww.color.outputmode == 0 || esprgbww.color.outputmode == 1" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Cold White</span>
+                                            </div>
+                                            <md-slider ng-model="esprgbww.color.brightness.cw" min="0" max="100" md-discrete class="colorslider" aria-label="Brightness Cold White">
+                                            </md-slider>
+                                        </div>
 
 
-                                </md-card-content>
-                            </md-card>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
                         </div>
-                    </div>
-                    <div  layout="column" layout-align="center" >
-                        <div layout="row" layout-align="center center">
-                            <md-card flex="50"  class="bottomcard">
-                                <md-card-header >
-                                    <md-card-header-text >
+                        <div  layout="column" layout-align="center" >
+                            <div layout="row" layout-align="center center">
+                                <md-card flex="50"  class="bottomcard">
+                                    <md-card-header >
+                                        <md-card-header-text >
 
-                                        <span class="md-title"> <md-icon class="md-card-icon">
-                                        <svg-icon name="exposure"></svg-icon>
-                                        </md-icon> White Temperatur (Kelvin)</span>
+                                            <span class="md-title"> <md-icon class="md-card-icon">
+                                            <svg-icon name="exposure"></svg-icon>
+                                            </md-icon> White Temperatur (Kelvin)</span>
 
-                                    </md-card-header-text>
+                                        </md-card-header-text>
 
-                                </md-card-header>
-                                <md-divider></md-divider>
-                                <md-card-content>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Warm White</span>
+                                    </md-card-header>
+                                    <md-divider></md-divider>
+                                    <md-card-content>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"  style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Warm White</span>
+                                            </div>
+                                            <md-slider disabled ng-model="esprgbww.color.colortemp.ww" min="2000" max="5000" md-discrete class="centerslider" aria-label="WarmWhite colortemp">
+                                            </md-slider>
                                         </div>
-                                        <md-slider disabled ng-model="esprgbww.color.colortemp.ww" min="2000" max="5000" md-discrete class="centerslider" aria-label="WarmWhite colortemp">
-                                        </md-slider>
-                                    </div>
-                                    <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"   style="padding-top: 15px;">
-                                        <div flex="30" flex-xs="100" class="sliderlabel">
-                                            <span>Cold White</span>
+                                        <div layout="row" layout-xs="column" layout-align="center center" layout-align-xs="center start"   style="padding-top: 15px;">
+                                            <div flex="30" flex-xs="100" class="sliderlabel">
+                                                <span>Cold White</span>
+                                            </div>
+                                            <md-slider disabled ng-model="esprgbww.color.colortemp.cw" min="4000" max="8000" md-discrete class="centerslider" aria-label="ColdWhite colortemp">
+                                            </md-slider>
                                         </div>
-                                        <md-slider disabled ng-model="esprgbww.color.colortemp.cw" min="4000" max="8000" md-discrete class="centerslider" aria-label="ColdWhite colortemp">
-                                        </md-slider>
-                                    </div>
-                                </md-card-content>
-                            </md-card>
+                                    </md-card-content>
+                                </md-card>
+                            </div>
                         </div>
-                    </div>
                 </div>
                 <div role="tabpanel" id="tab3-content" aria-labelledby="tab3" ng-switch-when="2" ng-cloak>
                     <div  layout="column" layout-align="center" >
@@ -389,22 +373,15 @@
                                             <span class="card-subtitle" >IP Setting</span>
                                         </div>
                                         <div flex></div>
-
                                     </div>
-
                                     <span class="md-caption">IP settings require a restart to take effect. If changed controller will restart automatically</span>
                                     <div layout="row"  layout-align="center center">
                                         <div flex>
-
                                             <span>Manual Configuration</span>
-
                                         </div>
                                         <md-input-container class="cardinput">
-
                                             <md-switch class="md-primary" ng-false-value="true" ng-true-value="false" md-no-ink aria-label="Manual Configuration" ng-model="esprgbww.network.connection.dhcp"></md-switch>
-
                                         </md-input-container>
-
                                     </div>
                                     <div ng-show="esprgbww.network.connection.dhcp == false" class="ng-hide">
                                     <div layout="row"  layout-align="center center">
@@ -586,7 +563,6 @@
                     </div>
                 </div>
                 <div role="tabpanel" id="tab4-content" aria-labelledby="tab4" ng-switch-when="3" ng-cloak>
-
                     <div  layout="column" layout-align="center" >                        
                         <div layout="row" layout-align="center center">
                             <md-card flex="50" >
@@ -622,6 +598,67 @@
                             </md-card>
                         </div>
                     </div>
+
+                    <!-- Contoller Options -->
+                    <div  layout="column" layout-align="center" >
+                        <div layout="row" layout-align="center center"  >
+                            <md-card flex="50" >
+                                <md-card-header >
+                                    <md-card-header-text >
+                                        <span class="md-title"> <md-icon class="md-card-icon">
+                                        <svg-icon name="memory"></svg-icon>
+                                        </md-icon> Contoller</span>
+                                    </md-card-header-text>
+                                </md-card-header>
+                                <md-divider></md-divider>
+
+                                <!-- Pin Config -->
+                                <md-card-content>
+                                    <div layout="row" layout-align="center center" layout-align-xs="start end">
+                                        <div flex hide-xs class="sliderlabel" >
+                                            <span>Pin Config</span>
+                                        </div>                                            
+                                        <md-input-container class="cardselect">
+                                            <md-select ng-model="esprgbww.general.pin_config" ng-disabled="custom_pin_config">
+                                                <label show-xs>Pin Config</label>
+                                                <md-option  ng-value="model.value" ng-repeat="model in pinConfigs"  value="{{model.id}}">
+                                                    {{model.title}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>                                         
+                                        <div hide-gt-xs style="width:30px"></div>                                       
+                                    </div>      
+                                    <div layout="row"  layout-align="center center">               
+                                        <div flex>
+                                            <span>Custom Pin Config</span>
+                                        </div>                
+                                        <md-input-container class="cardinput">
+                                            <md-switch class="md-primary"  md-no-ink aria-label="Custom Pin Config" ng-model="custom_pin_config"></md-switch>
+                                        </md-input-container>
+                                    </div>
+                                    <div ng-hide="!custom_pin_config">
+                                        <div layout="row"> 
+                                            <span class="md-caption">The order is red, green, blue, warmwhite, coldwhite.</span>
+                                        </div>
+                                        <div layout="row" style="margin-bottom:5px;">
+                                                <span class="md-caption">Example: 14,4,5,15,12</span>
+                                        </div>
+                                        <div layout="row"  layout-align="center center">                                               
+                                            <div flex class="inputlabel">                
+                                                <span>Pin Config</span>                
+                                            </div>
+                                            <md-input-container class="cardinput">
+                                                <input ng-model="esprgbww.general.pin_config" ng-value="esprgbww.general.pin_config" type="text">                                                    
+                                            </md-input-container>
+                                        </div>    
+                                    </div>                               
+                                </md-card-content>
+
+                            </md-card>
+                        </div>
+                    </div>   
+
+                    <!-- Security Config -->
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center">
                             <md-card flex="50" >
