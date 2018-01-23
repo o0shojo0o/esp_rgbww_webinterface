@@ -27,9 +27,8 @@ var hsvmodes = [
 ];
 
 var pinConfigs = [
-    {title:"mrpj PCB (ESP-12F)", id:0, value:"13,12,14,5,4"},
-    {title:"mrpj PCB (ESP-12E)", id:1, value:"13,12,14,4,5"},
-    {title:"Shojo PCB (WemosD1 mini)", id:2, value:"14,4,5,15,12"},
+    {title:"mrpj PCB (ESP-12)", id:0, value:"13,12,14,5,4"},
+    {title:"Shojo PCB (WemosD1 mini)", id:1, value:"14,4,5,15,12"}
 ];
 
 // inline svg icons so no request to ctrl have to be made
@@ -60,7 +59,7 @@ var icons = {
     wifi3_lock: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path opacity=".3" d="M12 3C5.3 3 .8 6.7.4 7l3.2 3.9L12 21.5l3.5-4.3v-2.6c0-2.2 1.4-4 3.3-4.7.3-.1.5-.2.8-.2.3-.1.6-.1.9-.1.4 0 .7 0 1 .1L23.6 7c-.4-.3-4.9-4-11.6-4z"/><path d="M23 16v-1.5c0-1.4-1.1-2.5-2.5-2.5S18 13.1 18 14.5V16c-.5 0-1 .5-1 1v4c0 .5.5 1 1 1h5c.5 0 1-.5 1-1v-4c0-.5-.5-1-1-1zm-1 0h-3v-1.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V16zm-10 5.5l3.5-4.3v-2.6c0-2.2 1.4-4 3.3-4.7C17.3 9 14.9 8 12 8c-4.8 0-8 2.6-8.5 2.9"/></svg>',
     wifi4: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12.01 21.49L23.64 7c-.45-.34-4.93-4-11.64-4C5.28 3 .81 6.66.36 7l11.63 14.49.01.01.01-.01z"/></svg>',
     wifi4_lock: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M23 16v-1.5c0-1.4-1.1-2.5-2.5-2.5S18 13.1 18 14.5V16c-.5 0-1 .5-1 1v4c0 .5.5 1 1 1h5c.5 0 1-.5 1-1v-4c0-.5-.5-1-1-1zm-1 0h-3v-1.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V16zm-6.5-1.5c0-2.8 2.2-5 5-5 .4 0 .7 0 1 .1L23.6 7c-.4-.3-4.9-4-11.6-4C5.3 3 .8 6.7.4 7L12 21.5l3.5-4.4v-2.6z"/></svg>'
-}
+};
 
 // Code taken from
 // https://coderwall.com/p/cvbgia/object-path-validation-a-solution-to-validate-deep-objects
