@@ -1,6 +1,6 @@
 # Web-Interface for RGBWW-Controller
 
-This project hosts a designated Web Interface that interacts with the [RGBWW Controller Firmware](https://github.com/patrickjahns/esp_rgbww_firmware).
+This project hosts a designated Web Interface that interacts with the [RGBWW Controller Firmware (vbs Edition)](https://github.com/verybadsoldier/esp_rgbww_firmware).
 The aim of this project is to provide a simple and easy to use interface for setup and configuration of the controller.
 It is not meant to be used as everyday interface and does not replace a designated integration with common HomeAutomation Tools (i.e. FHEM, OpenHab etc.).
 
