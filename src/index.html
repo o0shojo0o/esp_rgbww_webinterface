@@ -425,7 +425,7 @@
                             </md-card>
                         </div>
                     </div>
-<!--
+                    <!-- Server Settings     -->
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center">
                             <md-card flex="50">
@@ -436,71 +436,167 @@
                                         </md-icon> Server Settings</span>
                                     </md-card-header-text>
                                 </md-card-header>
-                                <md-divider></md-divider>
-
+                                <md-divider></md-divider>                               
+                                <!-- MQTT -->
                                 <md-card-content>
+                                    <span class="md-caption">MQTT settings require a restart to take effect. If changed controller will restart automatically</span>
                                     <div style="margin-top:10px;" layout="row"  layout-align="center center">
                                         <div>
                                             <span class="card-subtitle" >MQTT</span>
                                         </div>
                                         <div flex></div>
-                                        <md-switch ng-disabled="true" class="md-primary" md-no-ink aria-label="MQTT" ng-model="esprgbww.network.mqtt.enabled"></md-switch>
+                                        <md-switch class="md-primary" md-no-ink aria-label="MQTT" ng-model="esprgbww.network.mqtt.enabled"></md-switch>
                                     </div>
                                     <div ng-show="esprgbww.network.mqtt.enabled" class="ng-hide">
-                                    <div layout="row"  layout-align="center center">
-
-                                        <div flex class="inputlabel">
-
-                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Server</span>
-
+                                        <div layout="row"  layout-align="center center">
+                                            <div flex class="inputlabel">
+                                                <span ng-disabled="!esprgbww.network.mqtt.enabled">Server</span>
+                                            </div>
+                                            <md-input-container class="cardinput">
+                                                <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.server" aria-label="MQTT Server">
+                                            </md-input-container>
                                         </div>
-
-                                        <md-input-container class="cardinput">
-
-                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.server" aria-label="MQTT Server">
-
-                                        </md-input-container>
-
-                                    </div>
-                                    <div layout="row"  layout-align="center center">
-                                        <div flex class="inputlabel">
-
-                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Port</span>
-
+                                        <div layout="row"  layout-align="center center">
+                                            <div flex class="inputlabel">
+                                                <span ng-disabled="!esprgbww.network.mqtt.enabled">Port</span>
+                                            </div>
+                                            <md-input-container class="cardinput">
+                                                <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
+                                            </md-input-container>
                                         </div>
-                                        <md-input-container class="cardinput">
-
-                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.port" aria-label="MQTT Port" required type="number" step="any" min="1" max="65500">
-
-                                        </md-input-container>
-
-                                    </div>
-                                    <div layout="row" layout-align="center center">
-                                        <div flex class="inputlabel" >
-                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Username</span>
+                                        <div layout="row" layout-align="center center">
+                                            <div flex class="inputlabel" >
+                                                <span ng-disabled="!esprgbww.network.mqtt.enabled">Username</span>
+                                            </div>
+                                            <md-input-container class="cardinput">
+                                                <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.username" aria-label="MQTT Username">
+                                            </md-input-container>
                                         </div>
-                                        <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.username" aria-label="MQTT Username">
-
-                                        </md-input-container>
-
-                                    </div>
-                                    <div layout="row" layout-align="center center">
-                                        <div flex class="inputlabel" >
-                                            <span ng-disabled="!esprgbww.network.mqtt.enabled">Password</span>
+                                        <div layout="row" layout-align="center center">
+                                            <div flex class="inputlabel" >
+                                                <span ng-disabled="!esprgbww.network.mqtt.enabled">Password</span>
+                                            </div>
+                                            <md-input-container class="cardinput">
+                                                <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Username">
+                                            </md-input-container>
                                         </div>
-                                        <md-input-container class="cardinput">
-                                            <input type="text" ng-disabled="!esprgbww.network.mqtt.enabled" ng-model="esprgbww.network.mqtt.password" aria-label="MQTT Username">
+                                        <!-- Sync Options -->
+                                        <md-card-header>
+                                            <md-card-header-text>
+                                                <span class="md-title">                                               
+                                                    Sync Options
+                                                </span>
+                                            </md-card-header-text>
+                                        </md-card-header>
+                                        <md-divider></md-divider>
+                                        <!-- Sync Master Options -->
+                                        <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">Clock Master</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="Clock Master" ng-model="esprgbww.sync.clock_master_enabled"></md-switch>
+                                        </div>
+                                        <div ng-show="esprgbww.sync.clock_master_enabled" class="ng-hide">
+                                            <div layout="row"  layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Interval (sec)</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.sync.clock_master_interval" aria-label="Interval" required type="number" step="any" min="1" max="600">
+                                                </md-input-container>
+                                            </div>
+                                        </div>    
 
-                                        </md-input-container>
+                                        <div layout="row" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">CMD Master</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="CMD Master" ng-model="esprgbww.sync.cmd_master_enabled"></md-switch>
+                                        </div>                                                                            
+                                    
+                                        <div layout="row" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">Color Master</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="Color Master" ng-model="esprgbww.sync.color_master_enabled"></md-switch>
+                                        </div>
+                                        <div ng-show="esprgbww.sync.color_master_enabled" class="ng-hide">
+                                            <div layout="row" layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Interval (ms)</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.sync.color_master_interval_ms" aria-label="Interval" required type="number" step="any" min="1" max="6000">
+                                                </md-input-container>
+                                            </div>
+                                        </div>      
+                                        <md-divider></md-divider>                                
+                                        <!-- Sync Slave Options -->
+                                        <div layout="row" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">Clock Slave</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="Clock Slave" ng-model="esprgbww.sync.clock_slave_enabled"></md-switch>
+                                        </div>
+                                        <div ng-show="esprgbww.sync.clock_slave_enabled" class="ng-hide">
+                                            <div layout="row"  layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Topic</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.sync.clock_slave_topic" aria-label="Topic" required type="text">
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                        
 
-                                    </div>
+                                        <div layout="row" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">CMD Slave</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="CMD Slave" ng-model="esprgbww.sync.cmd_slave_enabled"></md-switch>
+                                        </div>
+                                        <div ng-show="esprgbww.sync.cmd_slave_enabled" class="ng-hide">
+                                            <div layout="row" layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Topic</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.sync.cmd_slave_topic" aria-label="Topic" required type="text">
+                                                </md-input-container>
+                                            </div>
+                                        </div>                                                
+
+                                    
+                                        <div layout="row" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">Color Slave</span>
+                                            </div>
+                                            <div flex></div>
+                                            <md-switch class="md-primary" md-no-ink aria-label="Color Slave" ng-model="esprgbww.sync.color_slave_enabled"></md-switch>
+                                        </div>
+                                        <div ng-show="esprgbww.sync.color_slave_enabled" class="ng-hide">
+                                            <div layout="row" layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Topic</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.sync.color_slave_topic" aria-label="Topic" required type="text">
+                                                </md-input-container>
+                                            </div>
+                                        </div>      
+
                                     </div>
                                 </md-card-content>                        
                             </md-card>
                         </div>
                     </div>
-                        -->
+                    
                     <div  layout="column" layout-align="center" >
                         <div layout="row" layout-align="center center">
                             <md-card flex="50"  class="bottomcard">
