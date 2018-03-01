@@ -490,7 +490,28 @@
                                         </md-card-header>
                                         <md-divider></md-divider>
                                         <!-- Sync Master Options -->
-                                        <div style="margin-top:10px;" layout="row"  layout-align="center center">
+                                        <div layout="row" ng-show="esprgbww.sync.clock_master_enabled || esprgbww.sync.cmd_master_enabled || esprgbww.sync.color_master_enabled" class="ng-hide" layout-align="center center">
+                                            <div>
+                                                <span class="card-subtitle">Topic Base</span>
+                                            </div>
+                                            <div flex></div>
+                                           <br />
+                                           <br />
+                                           <br />
+                                           <br />
+                                        </div>
+                                        <div ng-show="esprgbww.sync.clock_master_enabled || esprgbww.sync.cmd_master_enabled || esprgbww.sync.color_master_enabled" class="ng-hide" class="ng-hide">
+                                            <div layout="row"  layout-align="center center">
+                                                <div flex class="inputlabel">
+                                                    <span>Topic</span>
+                                                </div>
+                                                <md-input-container class="cardinput">
+                                                    <input type="text" ng-model="esprgbww.network.mqtt.topic_base" aria-label="Topic" required type="text">
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+
+                                        <div layout="row"  layout-align="center center">
                                             <div>
                                                 <span class="card-subtitle">Clock Master</span>
                                             </div>
